@@ -1,3 +1,4 @@
+'use strict';
 console.log("Крестики нолики:) \n" +
     "Скрипт реализует алгоритм игры крестики-нолики \n" +
     "Присутствует возможность задать разерность игрового поля \n" +
@@ -6,20 +7,20 @@ console.log("Крестики нолики:) \n" +
     "Игра заканчивается в момент, когда заканчиваются свободные ячейки поля\n");
 
 
-readlineSync = require('readline-sync');
-fieldDimension = readlineSync.question("Введите размерность игрового поля: ");
+var readlineSync = require('readline-sync');
+var fieldDimension = readlineSync.question("Введите размерность игрового поля: ");
 var gameField = GenerateGameField(fieldDimension);
 var game = new Game(gameField);
-playerName = readlineSync.question("Введите имя: ");
-computerName = "comp";
-player = new Player(playerName, "player");
-computer = new Player(computerName, "AI");
+var playerName = readlineSync.question("Введите имя: ");
+var computerName = "comp";
+var player = new Player(playerName, "player");
+var computer = new Player(computerName, "AI");
 
 while (checkGameStatus(game)) {
     try {
 
 
-        answer = readlineSync.question("Введите позицию для хода(формат: строка столбец) ");
+        var answer = readlineSync.question("Введите позицию для хода(формат: строка столбец) ");
         var move = answer.split(" ");
         move[0]--;
         move[1]--;
@@ -100,7 +101,7 @@ function Game(gameField) {
 
 
 function GenerateGameField(dimention) {
-    field = new Array(dimention);
+    var field = new Array(dimention);
     for (var i = 0; i < dimention; i++) {
         field[i] = new Array(dimention);
         for (var j = 0; j < dimention; j++) {
@@ -119,12 +120,12 @@ function CellIsNotEmptyError(cell) {
     Error.call(this, cell);
     this.name = "CellIsNotEmptyError";
     this.cell = cell;
-    this.message = "Cannot set value for cell X Y. Cell is not empty: " + (cell[0]+1) +" "+ (cell[1]+1);
+    this.message = "Cannot set value for cell X Y. Cell is not empty: " + (cell[0] + 1) + " " + (cell[1] + 1);
 }
 
 function CellOutOfRangeError(cell) {
     Error.call(this, cell);
     this.name = "CellOutOfRangeError";
     this.cell = cell;
-    this.message = "Cannot set value for cell X Y. Cell is out of the field range: " + (cell[0]+1) + " " +(cell[1]+1);
+    this.message = "Cannot set value for cell X Y. Cell is out of the field range: " + (cell[0] + 1) + " " + (cell[1] + 1);
 }
