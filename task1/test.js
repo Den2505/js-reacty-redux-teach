@@ -9,14 +9,14 @@ console.log("Крестики нолики:) \n" +
 
 var readlineSync = require('readline-sync');
 var fieldDimension = readlineSync.question("Введите размерность игрового поля: ");
-var gameField = GenerateGameField(fieldDimension);
+var gameField = generateGameField(fieldDimension);
 var game = new Game(gameField);
 var playerName = readlineSync.question("Введите имя: ");
 var computerName = "comp";
 var player = new Player(playerName, "player");
 var computer = new Player(computerName, "AI");
 
-while (checkGameStatus(game)) {
+while (game.checkStatus()) {
     try {
 
 
@@ -24,20 +24,20 @@ while (checkGameStatus(game)) {
         var move = answer.split(" ");
         move[0]--;
         move[1]--;
-        setGameStatus(game, player, move);
+        game.makeMove(player, move);
 
         console.log("Ваш ход " + playerName, answer);
 
-        game.field.forEach(function (item, i, arr) {
+        game.field.forEach(function (item) {
             console.log(item);
         });
 
-        if (!checkGameStatus(game)) {
+        if (!game.checkStatus()) {
             break;
         }
-        setGameStatus(game, computer, getMoveOfComputer(game));
+        game.makeMove(computer, game.getComputerMove());
 
-        game.field.forEach(function (item, i, arr) {
+        game.field.forEach(function (item) {
             console.log(item);
         });
     }
@@ -48,59 +48,60 @@ while (checkGameStatus(game)) {
 }
 console.log("Game over");
 
-function checkGameStatus(game) {
-    for (var i = 0; i < game.field.length; i++) {
-        for (var j = 0; j < game.field[i].length; j++) {
-            if (game.field[i][j] == "-") {
-                console.log(game.field[i][j]);
-                return true;
-            }
-
-        }
-    }
-    return false;
-}
-
-function setGameStatus(game, owner, move) {
-    //var p;
-    for (var i = 0; i < move.length; i++) {
-        if (game.field[0].length <= move[i]) {
-            throw new CellOutOfRangeError(move);
-        }
-    }
-    if (game.field[move[0]][move[1]] !== "-") {
-        throw new CellIsNotEmptyError(move);
-    }
-
-    if (owner.type === "player") {
-        game.field[move[0]][move[1]] = "x";
-    }
-    else {
-        game.field[move[0]][move[1]] = "0";
-    }
-}
-
-function getMoveOfComputer(game) {
-    var isRun = true;
-    while (isRun) {
-        var x = Math.floor(Math.random() * game.field.length);
-        var y = Math.floor(Math.random() * game.field.length);
-
-        if (game.field[x][y] === "-") {
-            isRun = false;
-            console.log("Ход компьютера " + [x + 1, y + 1]);
-            return [x, y];
-        }
-    }
-}
 
 
 function Game(gameField) {
     this.field = gameField;
+
+    this.makeMove = function (owner, move) {
+        //var p;
+        for (var i = 0; i < move.length; i++) {
+            if (this.field[0].length <= move[i]) {
+                throw new CellOutOfRangeError(move);
+            }
+        }
+        if (this.field[move[0]][move[1]] !== "-") {
+            throw new CellIsNotEmptyError(move);
+        }
+
+        if (owner.type === "player") {
+            this.field[move[0]][move[1]] = "x";
+        }
+        else {
+            this.field[move[0]][move[1]] = "0";
+        }
+    };
+
+    this.checkStatus = function () {
+        for (var i = 0; i < this.field.length; i++) {
+            for (var j = 0; j < this.field[i].length; j++) {
+                if (this.field[i][j] == "-") {
+                    console.log(this.field[i][j]);
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    };
+
+    this.getComputerMove = function () {
+        var isRun = true;
+        while (isRun) {
+            var x = Math.floor(Math.random() * this.field.length);
+            var y = Math.floor(Math.random() * this.field.length);
+
+            if (this.field[x][y] === "-") {
+                isRun = false;
+                console.log("Ход компьютера " + [x + 1, y + 1]);
+                return [x, y];
+            }
+        }
+    }
 }
 
 
-function GenerateGameField(dimention) {
+function generateGameField(dimention) {
     var field = new Array(dimention);
     for (var i = 0; i < dimention; i++) {
         field[i] = new Array(dimention);
