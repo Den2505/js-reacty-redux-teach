@@ -1,0 +1,6 @@
+frontend/*
+node_modules/*
+public/*
+test/coverage
+webpack.config.js
+backend/model/index.js
