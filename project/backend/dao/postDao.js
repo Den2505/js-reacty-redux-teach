@@ -1,17 +1,15 @@
 const {
     sequelize,
     sequelizePromise,
-    User,
-    Post,
-    FriendsShip
+    Post
 } = require(`./models/index`);
 
 async function getUserPosts(userId) {
-    return  sequelizePromise.then(async () => {
-            return  await Post.findAll({where: {user_id: userId}})
-                .then((posts) => {
-                    return posts;
-                });
+    return sequelizePromise.then(async () => {
+        return await Post.findAll({where: {user_id: userId}})
+            .then((posts) => {
+                return posts;
+            });
     });
 }
 
@@ -27,17 +25,10 @@ async function getPostById(id) {
 }
 
 async function createNewPost({text}, userId) {
-    const post = sequelizePromise.then(async () => {
+    return sequelizePromise.then(async () => {
         return await Post.create({text: text, user_id: userId});
     })
-        .then((post) => {
-            return post.dataValues;
-        });
-    // if (user) {
-    //     return user.addPosts(post);
-    // }
 
-    return post;
 }
 
 async function deletePostById(id) {
@@ -47,4 +38,19 @@ async function deletePostById(id) {
 
 }
 
-module.exports = {getPostById, getUserPosts, createNewPost, deletePostById};
+async function getFriendsPosts(userId, offset = 0, limit = 50) {
+    const posts = await sequelize.query(
+        `select id, text, user_id, created_at, updated_at   from post inner join 
+   (select requester as friend_id from  friends_ship where ( ${userId} = friends_ship.responser) and status = 1) as a on post.user_id = a.friend_id 
+   UNION
+   select id, text, user_id, created_at, updated_at from post inner join 
+   (select responser as friend_id from  friends_ship where ( ${userId} = friends_ship.requester) and status = 1) as a on post.user_id = a.friend_id 
+   order by updated_at
+   limit ${offset}, ${limit}`,
+        {type: sequelize.QueryTypes.SELECT});
+
+
+    return posts;
+}
+
+module.exports = {getPostById, getUserPosts, createNewPost, deletePostById, getFriendsPosts};

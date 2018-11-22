@@ -1,6 +1,7 @@
 `use strict`;
 const Sequelize = require('sequelize');
-const { db } = require('../../configs/config');
+const env = process.env.NODE_ENV || 'development';
+const {db}  = require('../../configs/config')[env];
 
 const sequelize = new Sequelize(db.name, db.username, db.password, {
     host: db.host,
@@ -24,7 +25,8 @@ Object.keys(models).forEach((modelName) => {
     }
 });
 
-const sequelizePromise = sequelize.sync({force: true});
+const sequelizePromise =  sequelize.sync({force: true}) ;
+//const sequelizePromise = async function(){return await sequelize.sync({force: true})} ;
 
 module.exports = {
     sequelize,

@@ -1,20 +1,21 @@
 `use strict`;
 const Router = require('koa-router');
 const userDao = require(`../dao/userDao`);
+const friendsDao = require(`../dao/friendsShipDao`);
+const postDao = require(`../dao/postDao`);
 const router = new Router();
 const passport = require(`../middlewares/passport`);
-const controller = require(`./backend/controllers/userController`);
+
 
 router.post(`/logup/`, async (ctx, next) => {
-    try {
-        const user = ctx.request.body;
-        await controller.validate(user);
-        await userDao.userAdd(ctx.request.body);
-        ctx.status = 201;
-    }
-    catch (e) {
-        ctx.throw(404,e.message);
-    }
+
+    await userDao.userAdd(ctx.request.body)
+        .catch((e) => {
+            ctx.throw(400, e)
+        });
+    ctx.redirect(`/login/`);
+    ctx.status = 201;
+
 
     await next;
 });
@@ -36,16 +37,24 @@ router.post(`/login/`, async (ctx, next) => {
     await next;
 });
 
+router.get(`/logout/`, async (ctx)=>{
+    await ctx.logout();
+    ctx.redirect(`/`);
+});
+
 router.get(`/users/`, async (ctx, next) => {
     if (ctx.isUnauthenticated()) {
         ctx.throw(401, 'Unauthenticated');
     }
-    const users = await userDao.getAllUsers();
+
+    const{first_name, second_name, email} = ctx.query;
+    console.log(first_name);
+    const users = await userDao.getAllUsers(first_name, second_name, email);
     ctx.response.body = users;
     await next;
 });
 
-router.get(`/users/me`, async (ctx, next) => {
+router.get(`/me`, async (ctx, next) => {
     if (ctx.isUnauthenticated()) {
         ctx.throw(401, 'Unauthenticated');
     }
@@ -54,11 +63,32 @@ router.get(`/users/me`, async (ctx, next) => {
 });
 
 router.get(`/users/:id`, async (ctx, next) => {
-    if (ctx.isUnauthenticated()) {
-        ctx.throw(401, 'Unauthenticated');
-    }
     const user = await userDao.getUserById(ctx.params.id);
-    ctx.response.body = user;
+    if (ctx.isUnauthenticated()) {
+        const data = {first_name: user.first_name, second_name: user.second_name};
+        ctx.response.body = data;
+        ctx.end;
+        // ctx.throw(401, 'Unauthenticated');
+    }
+    else {
+
+        if (ctx.params.id == ctx.state.user.id) {
+            ctx.redirect(`/me`);
+            ctx.end;
+        }
+        else {
+            if (friendsDao.isMyFriend(ctx.state.user.id, ctx.params.id)) {
+                const qwe = {first_name: user.first_name, second_name: user.second_name, email: user.email};
+                const posts = postDao.getUserPosts(ctx.params.id);
+                const data = {user: qwe, posts: posts};
+                ctx.response.body = data;
+                ctx.end;
+
+            }
+        }
+    }
+
+
     await next;
 });
 

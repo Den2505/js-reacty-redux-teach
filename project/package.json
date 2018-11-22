@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --watch backend ./backend/app.js",
     "debug": "nodemon --watch backend --inspect ./backend/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test mocha --exit --recursive ./backend/tests/support/hooks.js './backend/tests/**/*.spec.js'",
     "docker-build": "docker-compose build --no-cache",
     "docker-start": "docker-compose up",
     "docker-clean": "docker-compose stop && docker-compose down --rmi local --volumes --remove-orphans",
@@ -56,7 +56,10 @@
     "postcss-loader": "^2.1.0",
     "postcss-reporter": "^5.0.0",
     "postcss-url": "^7.3.0",
-    "style-loader": "^0.20.1"
+    "style-loader": "^0.20.1",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
   },
   "engines": {
     "node": "10"

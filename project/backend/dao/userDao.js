@@ -2,28 +2,40 @@
 
 const {
     User,
-    sequelizePromise
+    sequelizePromise,
+    // sequelize
 } = require(`./models/index`);
 
-const cripto = require(`crypto-js`);
-
+/*const cripto = require(`crypto-js`);*/
 
 
 async function userAdd({firstName, secondName, email, hash}) {
-   const user = arguments[0];
-    sequelizePromise.then(async () => {
+    return sequelizePromise.then(async () => {
         await User.create({
             first_name: firstName,
             second_name: secondName,
             email: email,
             hash: hash /*cripto.MD5(email + password).toString()*/
         });
-    });
+    })
 }
 
-async function getAllUsers() {
+async function getAllUsers(/*firstName, secondName, email*/) { //todo need to implement a field search
+   /* let pattern = {};
+    if (firstName) pattern.first_name = firstName;
+    if (secondName) pattern.second_name = secondName;
+    if (email) pattern.email = email;
+    if (Object.keys(pattern).length == 0) {pattern = `true`;}
+    else
+        pattern = JSON.stringify(pattern).replace('"', "`",true);
+       pattern = pattern.replace(':', "=");
+        console.log(pattern);*/
+
     return sequelizePromise.then(async () => {
-        const users = await User.findAll();
+        //const users = await sequelize.query(`Select * from user where ${pattern.toString()}`,  {type: sequelize.QueryTypes.SELECT});
+        const users = await User.findAll({where:{
+
+            }});
         return users;
     });
 }
@@ -31,15 +43,15 @@ async function getAllUsers() {
 async function getUserById(id) {
     return sequelizePromise.then(async () => {
         const user = await User.findOne({where: {id: id}});
-        return user;
+        return user.dataValues;
     });
 }
 
 async function deleteUser(id) {
     sequelizePromise
         .then(async () => {
-       await User.destroy({where: {id:id}});
-    })
+            await User.destroy({where: {id: id}});
+        })
 
 
 }

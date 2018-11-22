@@ -5,6 +5,7 @@ module.exports = function (sequelize) {
     const FriendsShip = sequelize.define('FriendsShip', {
         requester: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             references: {
                 model: 'user',
                 key: 'id'
@@ -12,13 +13,19 @@ module.exports = function (sequelize) {
         },
         responser: {
             type: Sequelize.INTEGER,
+            allowNull: false,
             references: {
                 model: 'user',
                 key: 'id'
             }
         },
         status: {
-            type: Sequelize.INTEGER(1)
+            type: Sequelize.INTEGER(1),
+            allowNull: false,
+            validate: {
+                max: 1
+            }
+
         }
     }, {
         underscored: true,
@@ -26,8 +33,8 @@ module.exports = function (sequelize) {
     });
 
     FriendsShip.associate = function (models) {
-        FriendsShip.belongsTo(models.User,{foreignKey: 'responser'}, {as: 'Responser'});
-        FriendsShip.belongsTo(models.User,{foreignKey: 'requester'}, {as: 'Requester'});
+        FriendsShip.belongsTo(models.User, {foreignKey: 'responser'}, {as: 'Responser'});
+        FriendsShip.belongsTo(models.User, {foreignKey: 'requester'}, {as: 'Requester'});
     };
     return FriendsShip;
 };

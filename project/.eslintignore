@@ -4,3 +4,4 @@ public/*
 test/coverage
 webpack.config.js
 backend/model/index.js
+backend/tests/*

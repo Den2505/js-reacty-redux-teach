@@ -1,4 +1,4 @@
 node_modules/
 .idea/
-public/dist/
-project/frontend/
+#public/dist/
+#project/frontend/
