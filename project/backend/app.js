@@ -3,7 +3,7 @@
 const PORT = 3000;
 
 const Koa = require('koa');
-//const serve = require('koa-static');
+const serve = require('koa-static');
 const webpack = require('webpack');
 const koaBody = require('koa-body');
 const port = process.env.PORT || PORT;
@@ -14,7 +14,7 @@ const friendsRouter = require(`./routes/friendsShipRoute`);
 const passport = require(`./middlewares/passport`);
 const session = require('koa-generic-session');
 const SequelizeSessionStore = require('koa-generic-session-sequelize');
-
+const send = require('koa-send')
 
 const {
     sequelize,
@@ -43,8 +43,8 @@ compiler.watch({}, () => {
 
 async function run() {
     await sequelizePromise.then();
-   //await sequelize.sync({force:true});
-//app.use(serve('public'));
+    //await sequelize.sync({force:true});
+
     app.keys = ['secret'];
     app.use(koaBody());
 
@@ -65,14 +65,20 @@ async function run() {
     app.use(userRouter.allowedMethods());
     app.use(friendsRouter.allowedMethods());
     app.use(postRouter.allowedMethods());
+    app.use(serve('public'));
+    //Default route
+    app.use(async function (ctx){
+        console.log("USE")
+         await send(ctx,'public/index.html')
+    });
 
 
-  return  app.listen(port, () => {
+    return app.listen(port, () => {
         /* eslint-disable no-console */
         console.log(`Server is started on ${port} port`);
         /* eslint-enable no-console */
 
-      //  return app;
+        //  return app;
 
     });
 }

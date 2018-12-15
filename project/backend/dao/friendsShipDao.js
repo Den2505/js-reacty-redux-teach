@@ -6,10 +6,24 @@ const {
 
 
 async function isMyFriend(myId, userId) {
-    return sequelize.query(`Select status from friends_ship where ((requester = ${myId} and responser = ${userId}) 
+   return sequelize.query(`Select status from friends_ship where ((requester = ${myId} and responser = ${userId}) 
     or (responser = ${myId} and requester = ${userId}) and status = 1 )`, {type: sequelize.QueryTypes.SELECT})
-        ? true
-        : false;
+        .then(usr => {
+            console.log(JSON.stringify(usr));
+            if (usr.length !== 0) {
+                if (usr[0].status === 1) {
+                    console.log("STATUS TRUE")
+                    return true
+                }
+            }
+
+            else {
+                console.log("STATUS FALSE")
+                return false
+            }
+        })
+
+
 }
 
 /////Select * from  friends_ship where (1 = friends_ship.requester or 1 = friends_ship.responser) and status = 1
@@ -32,7 +46,7 @@ async function getUserFriendsRequests(userId) {
     });
 }
 
-async function willBeMyFriend(requesterId, responrerId) {
+async function requestFriendship(requesterId, responrerId) {
     sequelizePromise.then(async () => {
         return sequelizePromise.then(async () => {
             return await FriendsShip.create({requester: requesterId, responser: responrerId, status: 0})
@@ -41,7 +55,7 @@ async function willBeMyFriend(requesterId, responrerId) {
     });
 }
 
-async function yesIWillBeFriend(cortegeId) {
+async function confirmFriendshipRequest(cortegeId) {
 
     return sequelizePromise.then(async () => {
         return await FriendsShip.findOne({where: {id: cortegeId}})
@@ -54,7 +68,7 @@ async function yesIWillBeFriend(cortegeId) {
 
 }
 
-async function noIWontBeFriend(cortegeId) {
+async function rejectFriendshipRequest(cortegeId) {
     sequelizePromise.then(async () => {
         return sequelizePromise.then(async () => {
             return await FriendsShip.findOne({where: {id: cortegeId}})
@@ -78,9 +92,9 @@ async function deleteFriendResponse(requesterId, responrerId) {
 module.exports = {
     getUserFriends,
     getUserFriendsRequests,
-    willBeMyFriend,
-    yesIWillBeFriend,
-    noIWontBeFriend,
+    requestFriendship,
+    confirmFriendshipRequest,
+    rejectFriendshipRequest,
     /*deleteFriend,
     deleteFriendResponse,*/
     isMyFriend

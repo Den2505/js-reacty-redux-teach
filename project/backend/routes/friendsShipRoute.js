@@ -13,15 +13,15 @@ router
     })
     .post(`/me/friends/requests/:rid/response`, async (ctx) => { // sed response by request id
         if (ctx.request.body.status === 1)
-            ctx.body = await friendsDao.yesIWillBeFriend(ctx.params.rid);
+            ctx.body = await friendsDao.confirmFriendshipRequest(ctx.params.rid);
         if (ctx.request.body.status === -1)
-            ctx.body = await friendsDao.noIWontBeFriend(ctx.params.rid);
+            ctx.body = await friendsDao.rejectFriendshipRequest(ctx.params.rid);
     })
     .delete(`/me/friends/:fid`, async (ctx) => { // delete user from friends by id
         ctx.body = await friendsDao.deleteFriend();
     })
     .get(`/users/:uid/beMyFriend/`, async (ctx) => {
-        ctx.body = await friendsDao.willBeMyFriend(ctx.state.user.id, ctx.params.uid);
+        ctx.body = await friendsDao.requestFriendship(ctx.state.user.id, ctx.params.uid);
     });
 
 module.exports = router;
