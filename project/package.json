@@ -23,7 +23,9 @@
   "homepage": "https://bitbucket.org/ttschool/project-template#readme",
   "dependencies": {
     "babel-core": "^6.26.0",
+    "crypto-js": "^3.1.9-1",
     "koa": "^2.6.1",
+    "koa-body": "^4.0.4",
     "koa-bodyparser": "^4.2.1",
     "koa-generic-session": "^2.0.1",
     "koa-generic-session-sequelize": "^2.0.3",
@@ -35,10 +37,9 @@
     "mysql2": "^1.6.4",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "redux-thunk": "^2.3.0",
     "sequelize": "^4.41.1",
-    "webpack": "^3.11.0",
-    "crypto-js": "^3.1.9-1",
-    "koa-body": "^4.0.4"
+    "webpack": "^3.11.0"
   },
   "devDependencies": {
     "babel-loader": "^7.1.2",

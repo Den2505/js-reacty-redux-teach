@@ -68,7 +68,6 @@ async function run() {
     app.use(serve('public'));
     //Default route
     app.use(async function (ctx){
-        console.log("USE")
          await send(ctx,'public/index.html')
     });
 

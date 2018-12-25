@@ -1,9 +1,9 @@
 import React from 'react'
 import User from './User'
 
-function UserList({users}) {
+function UserList({users, allUsers}) {
     const usersElements = users.map(user =>
-        <li key={user.id}>{<User user = {user}/>}</li>
+        <li  key={user.id}>{<User  user = {user}/>}</li>
     );
 
     return (

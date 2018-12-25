@@ -11,7 +11,8 @@ class User extends React.Component {
                 id: user.id,
                 firstName: user.first_name,
                 secondName: user.second_name
-            }
+            },
+            cancelAddButton: this.props.cancelAddButton || false,
 
         }
     }
@@ -20,16 +21,21 @@ class User extends React.Component {
 
         return (
             <div>
-
-                <Link to={`./users/${this.state.user.id}`} >
+                <Link to={`/users/${this.state.user.id}`}>
                     {`${this.state.user.firstName} ${this.state.user.secondName }`}
                 </Link>
+
             </div>
         )
     }
 
-
-
+createAddButton(){
+        if(!this.state.cancelAddButton){
+            return (
+                <button>Добавить в дружки</button>
+            )
+        }
+}
     render() {
         return (
             <div>

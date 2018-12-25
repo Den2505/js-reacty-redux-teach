@@ -42,10 +42,10 @@ class LogInForm extends React.Component {
 
     redirect() {
         if (this.state.redirect) {
-/*
+
             window.location = './'
-*/
-            this.props.history.push('/')
+
+           // this.props.history.push('/profile')
         }
 
     }

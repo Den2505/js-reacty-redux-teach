@@ -81,10 +81,10 @@ router.get(`/users/:id`, async (ctx, next) => {
             ctx.end;
         }
         else {
-         await friendsDao.isMyFriend(ctx.state.user.id, ctx.params.id).then(bool => {
+         await friendsDao.isMyFriend(ctx.state.user.id, ctx.params.id).then(async bool => {
                 if(bool){
                     const res = {id:user.id,first_name: user.first_name, second_name: user.second_name, email: user.email};
-                    const posts = postDao.getUserPosts(ctx.params.id);
+                    const posts =  await postDao.getUserPosts(ctx.params.id);
                     const data = {user: res, posts: posts};
                     ctx.response.body = data;
                     ctx.end;

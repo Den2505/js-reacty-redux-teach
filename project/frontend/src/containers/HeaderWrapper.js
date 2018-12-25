@@ -1,12 +1,13 @@
 import React from 'react'
 import {Link} from "react-router-dom";
-import { withRouter } from "react-router";
+import {withRouter} from "react-router";
 
 class HeaderWrapper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            validate: false
+            validate: false,
+            needValidate: false
         }
 
     }
@@ -31,7 +32,7 @@ class HeaderWrapper extends React.Component {
     }
 
     validate() {
-        debugger // todo сделать обновление state в зависимости от роутинга
+    //    debugger // todo сделать обновление state в зависимости от роутинга
         if (this.state.validate) {
             return (
                 <ul>
@@ -45,7 +46,7 @@ class HeaderWrapper extends React.Component {
                         <Link to='/users'>Пользователи</Link>
                     </li>
                     <li>
-                        <a href='./logout'>logout</a>
+                        <a href='/logout'>logout</a>
                     </li>
                 </ul>
 
@@ -71,6 +72,7 @@ class HeaderWrapper extends React.Component {
     }
 
     render() {
+
         return (
             <nav>
                 {this.validate()}

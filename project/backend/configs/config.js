@@ -6,7 +6,8 @@ module.exports = {
             password: 'root',
             host: 'localhost',
             port: 3306,
-            dialect: 'mysql'
+            dialect: 'mysql',
+            charset: 'utf8mb4'
         }
     },
     test: {
@@ -16,7 +17,8 @@ module.exports = {
             password: 'root',
             host: 'localhost',
             port: 3306,
-            dialect: 'mysql'
+            dialect: 'mysql',
+            charset: 'utf8mb4'
         }
     }
 };

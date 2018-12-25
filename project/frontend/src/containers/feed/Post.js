@@ -12,29 +12,28 @@ class Post extends React.Component {
             user_id: post.user_id,
             updated_at: post.updated_at
         };
-        this.loadUser = this.loadUser.bind(this);
-        this.getAuthor = this.getAuthor.bind(this);
+
 
     }
 
-    componentDidMount(){
-        this.getAuthor();
-    }
+  componentDidMount(){
+      this.getAuthor();
+  }
 
     getAuthor() {
-         fetch(`./users/${this.state.user_id}`)
+        fetch(`/users/${this.state.user_id}`)
             .then((response) =>
                 response.json()
             )
-           .then((data)=>{
-               this.setState({userData:data.user})
-           })
+            .then((data) => {
+                this.setState({userData: data.user})
+            })
 
     }
 
-    loadUser(){
-        if(this.state.userData){
-           return  (<PostAuthor user = {this.state.userData}/>)
+    loadUser() {
+        if (this.state.userData) {
+            return (<PostAuthor user={this.state.userData}/>)
         }
         else return (<div>loading...</div>)
     }
@@ -43,7 +42,7 @@ class Post extends React.Component {
     render() {
         return (
             <div>
-               {this.loadUser()}
+                {this.loadUser()}
                 <h4>{this.state.text}</h4>
             </div>
         )

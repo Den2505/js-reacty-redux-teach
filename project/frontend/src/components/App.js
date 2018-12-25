@@ -1,12 +1,14 @@
 import React from 'react';
+import {Provider} from 'react-redux'
 import '../styles/components/App.css';
 import Login from '../containers/auth/LogIn'
 import Registration from "../containers/auth/Registration";
 import Feed from '../containers/feed/Feed'
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import {BrowserRouter as Router, Route, Link, Redirect} from "react-router-dom";
 import Profile from '../containers/Profile/Profile'
 import HeaderWrapper from '../containers/HeaderWrapper'
 import Users from '../containers/users/Users'
+import store from '../redux-components/store'
 
 
 
@@ -21,7 +23,7 @@ class App extends React.Component {
     render() {
         return (
             <div className='app'>
-
+                <Provider store={store}>
                 <Router>
                     <div>
                         <HeaderWrapper/>
@@ -34,12 +36,19 @@ class App extends React.Component {
                         <Route
                             exact
                             path='/profile'
-                            component={Profile}
+                            render = {(props)=>
+                                <Profile status = 'me' {...props}/>
+                            }
                         />
                         <Route
                             exact
                             path='/users/:uid'
-                            component={Profile}
+                           /* component={Profile}*/
+                            render = {(props)=>
+                                <div>
+                                    <Profile  uid = {props.match.params.uid} {...props}/>
+                                </div>
+                            }
                         />
                         <Route
                             exact
@@ -60,6 +69,7 @@ class App extends React.Component {
 
                     </div>
                 </Router>
+                </Provider>
             </div>
         );
     }
