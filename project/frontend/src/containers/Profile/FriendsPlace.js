@@ -1,34 +1,45 @@
 import React from 'react'
+//import {bindActionCreators} from 'redux'
+//import {connect} from 'react-redux'
 import UserList from '../users/UserList'
+//import {setFriendsList} from '../../redux-components/actions'
 
 
-class FriendsPlace extends React.Component {
+class FriendsPlace2 extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            friends: []
-        }
+            friends: [],
+            uid: props.user
+        };
+       // console.log(this.props)
+        //this.getFriendsList = this.getFriendsList.bind(this)
+        //this.onFriendsLoad =this.onFriendsLoad.bind(this)
     }
 
+    componentDidMount() {
 
-    componentWillMount() {
-        this.getUserFriends()
+        this.getFriendsList();
     }
 
-    getUserFriends() {
-        fetch('./me/friends')
-            .then((req) => req.json())
-            .then((friends) => {
-                // this.setState({friends: JSON.stringify(friends)})
-                this.setState({friends: friends})
-            })
+    getFriendsList() {
+        //if (this.state.uid !== undefined)
+            fetch(`/users/${this.props.uid}/friends`)
+                .then((req) => req.json())
+                .then((friends) => {
+                    this.setState({friends: friends})
+                })
     }
 
     onFriendsLoad() {
-        const arr = this.state.friends;
+        /*
+             this.props.fetchFriendsList;
+             return <UserList users={this.props.friends || []}/>*/
 
-        return <UserList users={arr}/>
+        return <UserList users={this.state.friends || []}/>
+
     }
+
 
     render() {
         return (
@@ -39,4 +50,24 @@ class FriendsPlace extends React.Component {
     }
 }
 
-export default FriendsPlace
+/*
+function mapStateToProps(store) {
+    return {
+        friends: store.friends.friends
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+
+    return {
+        fetchFriendsList: fetch('./me/friends')
+            .then((req) => req.json())
+            .then((friends) => {
+                dispatch(setFriendsList(friends))
+            })
+    }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendsPlace)*/
+export default FriendsPlace2;
