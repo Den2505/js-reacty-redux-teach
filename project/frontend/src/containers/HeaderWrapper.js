@@ -32,20 +32,20 @@ class HeaderWrapper extends React.Component {
     }
 
     validate() {
-    //    debugger // todo сделать обновление state в зависимости от роутинга
+        //    debugger // todo сделать обновление state в зависимости от роутинга
         if (this.state.validate) {
             return (
                 <ul>
-                    <li>
+                    <li >
                         <Link to='/profile'>Профиль</Link>
                     </li>
-                    <li>
+                    <li >
                         <Link to='/feed'>Лента</Link>
                     </li>
-                    <li>
+                    <li >
                         <Link to='/users'>Пользователи</Link>
                     </li>
-                    <li>
+                    <li >
                         <a href='/logout'>logout</a>
                     </li>
                 </ul>
@@ -57,14 +57,14 @@ class HeaderWrapper extends React.Component {
         else
             return (
                 <ul>
-                    <li>
+                    <li >
                         <Link to='/login'>Войти</Link>
                     </li>
 
                     <li>
                         <Link to='/registration'>Зарегистрироваться</Link>
                     </li>
-                    <li>
+                    <li >
                         <Link to='/users'>Пользователи</Link>
                     </li>
                 </ul>
@@ -74,9 +74,12 @@ class HeaderWrapper extends React.Component {
     render() {
 
         return (
-            <nav>
-                {this.validate()}
-            </nav>
+            <div >
+                <nav >
+                    {this.validate()}
+                </nav>
+            </div>
+
         )
     }
 }

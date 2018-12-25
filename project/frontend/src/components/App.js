@@ -9,6 +9,7 @@ import Profile from '../containers/Profile/Profile'
 import HeaderWrapper from '../containers/HeaderWrapper'
 import Users from '../containers/users/Users'
 import store from '../redux-components/store'
+import 'bootstrap/dist/css/bootstrap.css'
 
 
 

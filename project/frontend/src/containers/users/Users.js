@@ -9,13 +9,13 @@ class Users extends React.Component {
         console.log(this.props.friends)
         this.state = {
             users: [],
-            text: {
-                firstName: '',
-                secondName: ''
-            }
+            firstName: '',
+            secondName: '',
+            offset: 50
 
         };
         this.onChangeForm = this.onChangeForm.bind(this);
+        this.onSubmitForm = this.onSubmitForm.bind(this);
     }
 
     componentDidMount() {
@@ -49,8 +49,9 @@ class Users extends React.Component {
         this.setState(obj);
     }
 
-    onSubmitForm(){
-        fetch(`/users?limit=${}`)
+    onSubmitForm(event) {
+        event.preventDefault();
+        fetch(`/users?first_name=${this.state.firstName}&second_name=${this.state.secondName}&offset=${this.state.offset}`)
             .then((res) => res.json())
             .then(users => this.setState({users: users}))
     }
@@ -66,7 +67,7 @@ class Users extends React.Component {
                     Имя:
                     <input name='firstName' value={this.state.firstName} onChange={this.onChangeForm}/>
                 </label>
-                <input name='submit' type='submit' value='Поиск'/>
+                <input name='submit' type='submit' value='Поиск' onClick={this.onSubmitForm}/>
             </form>
         )
     }

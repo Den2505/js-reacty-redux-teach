@@ -20,22 +20,40 @@ async function userAdd({firstName, secondName, email, hash}) {
     })
 }
 
-async function getAllUsers(/*firstName, secondName, email*/) { //todo need to implement a field search
-   /* let pattern = {};
-    if (firstName) pattern.first_name = firstName;
-    if (secondName) pattern.second_name = secondName;
-    if (email) pattern.email = email;
-    if (Object.keys(pattern).length == 0) {pattern = `true`;}
-    else
-        pattern = JSON.stringify(pattern).replace('"', "`",true);
-       pattern = pattern.replace(':', "=");
-        console.log(pattern);*/
+async function getAllUsers(firstName, secondName) {
+
+    if (!firstName && !secondName) {
+        firstName = '%';
+        secondName = '%';
+    }
+    else if (firstName && !secondName) {
+        firstName = `%${firstName}%`;
+        secondName = '%'
+    }
+    else if (secondName && !firstName) {
+        secondName = `%${secondName}%`;
+        firstName = '%';
+    }
+    else {
+        if (firstName) {
+            firstName = `%${firstName}%`
+        }
+        if (secondName) {
+            secondName = `%${secondName}%`
+        }
+    }
+
 
     return sequelizePromise.then(async () => {
-        //const users = await sequelize.query(`Select * from user where ${pattern.toString()}`,  {type: sequelize.QueryTypes.SELECT});
-        const users = await User.findAll({where:{
+        const users = await User.findAll({
+            where: {
+                $and: {
+                    first_name: {$like: firstName},
+                    second_name: {$like: secondName}
+                }
 
-            }});
+            }
+        });
         return users;
     });
 }

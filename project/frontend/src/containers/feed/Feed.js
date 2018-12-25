@@ -17,43 +17,57 @@ class Feed extends React.Component {
                         id: 2,
                         text: `sdfsdfsdfsdfdsf`
                     }],
-            data: new Array()
+            data: new Array(),
 
-        }
-
-        this.loading = this.loading.bind(this)
-        this.getPosts = this.getPosts.bind(this)
+            offset: 0,
+            limit: 10,
+            offsetStep: 10
+        };
+        /*
+                this.loading = this.loading.bind(this)
+                this.getPosts = this.getPosts.bind(this)*/
+        this.shiftOffset = this.shiftOffset.bind(this);
     }
 
-    componentWillMount(){
-        this.getPosts();
+    componentWillMount() {
+        this.getPosts().then((responseData) => {
+            this.setState({data: responseData})
+        });
     }
 
     getPosts() {
 
-        fetch('./feed')
+        return fetch(`./feed?offset=${this.state.offset}&limit=${this.state.limit}`)
             .then((response) => response.json())
-            .then((responseData) => {
-                this.setState({data: responseData})
-            })
-
-
     }
 
-    loading(){
-        if(this.state.data[0] ){
-            return ( <PostList posts={this.state.data}/>)
+    loading() {
+        if (this.state.data[0]) {
+            return (<PostList posts={this.state.data}/>)
         }
         else return (<h3>Loading</h3>)
     }
 
+    shiftOffset() {
+        new Promise(resolve => {
+            const newOffset = this.state.offset + this.state.offsetStep;
+            this.setState({offset: newOffset});
+            resolve();
+        }).then(() => {
+            this.getPosts().then((responseData) => {
+                this.setState({data: this.state.data.concat(responseData)})
+            })
+        })
 
+
+    }
 
     render() {
         return (
             <div>
                 <h2>Friends Posts</h2>
                 {this.loading()}
+                <button onClick={this.shiftOffset}>Показать ещё</button>
             </div>
         )
     }

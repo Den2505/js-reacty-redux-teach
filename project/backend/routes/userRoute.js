@@ -45,7 +45,7 @@ router.get(`/logout/`, async (ctx) => {
     ctx.redirect(`/`);
 });
 
-router.get(`/users/`, async (ctx, next) => {
+router.get(`/users`, async (ctx, next) => {
     if (ctx.isUnauthenticated()) {
         ctx.throw(401, 'Unauthenticated');
     }

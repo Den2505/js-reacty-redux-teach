@@ -33,9 +33,10 @@ router.get(`/users/:uid/posts/:pid`, async (ctx) => {
                 return ctx.throw(400, e);
             });
     })
-    .get(`/feed/`, async (ctx, next) => {
+    .get(`/feed`, async (ctx, next) => {
 
         const {offset, limit} = ctx.query;
+        console.log('Offset '+ offset);
         ctx.response.body = await postDao.getFriendsPosts(ctx.state.user.id, offset, limit)
             .catch((e) => {
                 return ctx.throw(400, e);
