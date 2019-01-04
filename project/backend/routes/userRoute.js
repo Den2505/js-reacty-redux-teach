@@ -4,7 +4,7 @@ const friendsDao = require(`../dao/friendsShipDao`);
 const postDao = require(`../dao/postDao`);
 const passport = require(`../middlewares/passport`);
 
-const userRoter = {
+const userRouter = {
     logup: async (ctx) => {
 
         await userDao.userAdd(ctx.request.body)
@@ -123,4 +123,4 @@ const userRoter = {
 
 
 
-module.exports = userRoter;
+module.exports = userRouter;

@@ -29,7 +29,7 @@ module.exports = function (sequelize) {
         }
     }, {
         underscored: true,
-        tableName: 'friends_ship'
+            tableName: 'friends_ship'
     });
 
     FriendsShip.associate = function (models) {

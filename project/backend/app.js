@@ -1,7 +1,6 @@
 'use strict';
 
 const PORT = 3000;
-
 const Koa = require('koa');
 const serve = require('koa-static');
 const webpack = require('webpack');
@@ -23,7 +22,6 @@ const {
     sequelize,
     sequelizePromise
 } = require(`./dao/models/index`);
-//const User = require('./model/user');
 
 const compiler = webpack(require('../webpack.config.js'), (err, stats) => {
     if (err || stats.hasErrors()) {
@@ -47,8 +45,7 @@ compiler.watch({}, () => {
 async function run() {
     //logging
     app.use(koaLogger(logger));
-    await sequelizePromise.then();
-    //await sequelize.sync({force:true});
+
 
     app.keys = ['secret'];
     app.use(koaBody());
@@ -83,7 +80,7 @@ async function run() {
     });
 }
 
-const server = run();
+const server = sequelizePromise.then(()=>run());
 
 module.exports = server;
 
