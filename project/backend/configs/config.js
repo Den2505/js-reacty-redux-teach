@@ -1,3 +1,5 @@
+const bunyan = require('bunyan');
+
 module.exports = {
     development: {
         db: {
@@ -8,7 +10,16 @@ module.exports = {
             port: 3306,
             dialect: 'mysql',
             charset: 'utf8mb4'
-        }
+        },
+        logger: bunyan.createLogger({
+            name: 'Social_Network',
+            level: 'trace',
+            streams: [{
+                path: '/home/den/log/backend.log',
+            }]
+
+        })
+
     },
     test: {
         db: {
@@ -19,7 +30,11 @@ module.exports = {
             port: 3306,
             dialect: 'mysql',
             charset: 'utf8mb4'
-        }
+        },
+        logger: bunyan.createLogger({
+            name: 'Social Network',
+            level: 'debug'
+        })
     }
 };
 

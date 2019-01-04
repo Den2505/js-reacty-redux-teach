@@ -8,13 +8,16 @@ const webpack = require('webpack');
 const koaBody = require('koa-body');
 const port = process.env.PORT || PORT;
 const app = new Koa();
-const userRouter = require(`./routes/userRoute`);
-const postRouter = require(`./routes/postRoute`);
-const friendsRouter = require(`./routes/friendsShipRoute`);
+const router = require(`./routes`);
 const passport = require(`./middlewares/passport`);
 const session = require('koa-generic-session');
 const SequelizeSessionStore = require('koa-generic-session-sequelize');
-const send = require('koa-send')
+const send = require('koa-send');
+//Logging ->
+const env = process.env.NODE_ENV || 'development';
+const {logger}  = require('./configs/config')[env];
+const koaLogger = require('koa-bunyan');
+
 
 const {
     sequelize,
@@ -42,6 +45,8 @@ compiler.watch({}, () => {
 });
 
 async function run() {
+    //logging
+    app.use(koaLogger(logger));
     await sequelizePromise.then();
     //await sequelize.sync({force:true});
 
@@ -58,18 +63,14 @@ async function run() {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
-
-    app.use(userRouter.routes());
-    app.use(friendsRouter.routes());
-    app.use(postRouter.routes());
-    app.use(userRouter.allowedMethods());
-    app.use(friendsRouter.allowedMethods());
-    app.use(postRouter.allowedMethods());
+    app.use(router.routes());
+    app.use(router.allowedMethods());
     app.use(serve('public'));
     //Default route
     app.use(async function (ctx){
          await send(ctx,'public/index.html')
     });
+
 
 
     return app.listen(port, () => {
