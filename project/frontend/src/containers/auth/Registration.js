@@ -1,5 +1,7 @@
 import React from 'react';
 import {Redirect} from "react-router-dom";
+//const md5 = require('js-md5');
+import md5 from 'js-md5';
 
 class Registration extends React.Component {
     constructor(props) {
@@ -23,22 +25,30 @@ class Registration extends React.Component {
     }
 
     handleSubmit(event) {
-        fetch('./logup', {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify(this.state)
+        new Promise((resolve) => {
+            const hash = md5(this.state.email + this.state.hash);
+            let message = Object.assign({},this.state);
+            message.hash = hash;
+            resolve(message);
         })
-            .then((res) => {
-                if (res.status === 201) {
-                    this.setState({redirect: true})
-                }
-                else {
-                  res.text().then((txt)=>{
-                      this.setState({error:txt})
-                  })
-                }
+            .then((message) => {
+                fetch('./signup', {
+                    method: 'POST',
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    },
+                    body: JSON.stringify(message)
+                })
+                    .then((res) => {
+                        if (res.status === 201) {
+                            this.setState({redirect: true})
+                        }
+                        else {
+                            res.text().then((txt) => {
+                                this.setState({error: txt})
+                            })
+                        }
+                    });
             });
 
 

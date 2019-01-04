@@ -3,7 +3,7 @@ const Sequelize = require(`sequelize`);
 
 module.exports = function (sequelize) {
     const FriendsShip = sequelize.define('FriendsShip', {
-        requester: {
+        requester_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
@@ -11,7 +11,7 @@ module.exports = function (sequelize) {
                 key: 'id'
             }
         },
-        responser: {
+        responser_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
@@ -20,7 +20,7 @@ module.exports = function (sequelize) {
             }
         },
         status: {
-            type: Sequelize.INTEGER(1),
+            type: Sequelize.INTEGER(1),  // Implemented redundancy for subscribers function
             allowNull: false,
             validate: {
                 max: 1
@@ -33,8 +33,8 @@ module.exports = function (sequelize) {
     });
 
     FriendsShip.associate = function (models) {
-        FriendsShip.belongsTo(models.User, {foreignKey: 'responser'}, {as: 'Responser'});
-        FriendsShip.belongsTo(models.User, {foreignKey: 'requester'}, {as: 'Requester'});
+        FriendsShip.belongsTo(models.User, {foreignKey: 'responser_id'}, {as: 'Responser'});
+        FriendsShip.belongsTo(models.User, {foreignKey: 'requester_id'}, {as: 'Requester'});
     };
     return FriendsShip;
 };

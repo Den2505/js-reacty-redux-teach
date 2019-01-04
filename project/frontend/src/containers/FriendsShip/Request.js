@@ -18,7 +18,7 @@ export default class Request extends React.Component {
     getRequester() {
         fetch(`/users/${this.state.request.requester}`)
             .then((res) => res.json())
-            .then((requester) => this.setState({requester: requester}))
+            .then((requester) => this.setState({requester_id: requester}))
     }
 
     confirmFriendsShip() {

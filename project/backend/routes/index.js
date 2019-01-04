@@ -8,7 +8,7 @@ const router = new Router();
 
 router
     ///UserRoutes
-    .post(`/logup/`, userRouter.logup)
+    .post(`/signup/`, userRouter.logup)
     .post(`/login/`, userRouter.login)
     .get(`/logout/`, userRouter.logout)
     .get(`/users`, userRouter.getAllUsers)

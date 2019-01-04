@@ -29,10 +29,10 @@ async function getFriendsPosts(userId, offset = 0, limit = 50) {
     const posts = await sequelize.query(
         // Ситуация аналогична friendsShipDao ->
         `select id, text, user_id, created_at, updated_at   from post inner join 
-   (select requester as friend_id from  friends_ship where ( ${userId} = friends_ship.responser) and status = 1) as a on post.user_id = a.friend_id 
+   (select requester_id as friend_id from  friends_ship where ( ${userId} = friends_ship.responser_id) and status = 1) as a on post.user_id = a.friend_id 
    UNION
    select id, text, user_id, created_at, updated_at from post inner join 
-   (select responser as friend_id from  friends_ship where ( ${userId} = friends_ship.requester) and status = 1) as a on post.user_id = a.friend_id 
+   (select responser_id as friend_id from  friends_ship where ( ${userId} = friends_ship.requester_id) and status = 1) as a on post.user_id = a.friend_id 
    order by updated_at
    limit ${offset}, ${limit}`,
         {type: sequelize.QueryTypes.SELECT});

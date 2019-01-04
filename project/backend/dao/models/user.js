@@ -41,8 +41,8 @@ module.exports = (sequelize) => {
 
     User.associate = function (models) {
        User.hasMany(models.Post);
-       User.hasMany(models.FriendsShip,{foreignKey: 'responser'});
-       User.hasMany(models.FriendsShip,{foreignKey: 'requester'});
+       User.hasMany(models.FriendsShip,{foreignKey: 'responser_id'});
+       User.hasMany(models.FriendsShip,{foreignKey: 'requester_id'});
     };
 
     return User;

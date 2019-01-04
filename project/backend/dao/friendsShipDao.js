@@ -8,10 +8,10 @@ async function isMyFriend(myId, userId) {
         where: {
             $or: [{
                 $and: {
-                    requester: myId,
-                    responser: userId
+                    requester_id: myId,
+                    responser_id: userId
                 }
-            }, {$and: {responser: myId, requester: userId}}]
+            }, {$and: {responser_id: myId, requester_id: userId}}]
         }
     })
         .then(usr => {
@@ -34,7 +34,7 @@ async function getUserFriends(myId) {
     //Sequelize не поддерживает множественный Join(Multiply JOIN. TWO causes in ON alias), также как и Union.   ->
 
     /*select id, first_name, second_name, email from user  inner join
-    (select requester as friend2_id ,responser as friend_id from  friends_ship where ( ${myId} = friends_ship.responser or ${myId} = friends_ship.requester ) and status = 1) as a on (user.id = a.friend_id or user.id = a.friend2_id)
+    (select requester_id as friend2_id ,responser_id as friend_id from  friends_ship where ( ${myId} = friends_ship.responser_id or ${myId} = friends_ship.requester_id ) and status = 1) as a on (user.id = a.friend_id or user.id = a.friend2_id)
     where id != ${myId} --> в Sequelize не работает
     */
 
@@ -42,23 +42,23 @@ async function getUserFriends(myId) {
         include:[{
             model: FriendsShip,
            /!* on:{
-                requester: Sequelize.col('User.id') ,
-                responser: Sequelize.col('User.id'),
+                requester_id: Sequelize.col('User.id') ,
+                responser_id: Sequelize.col('User.id'),
             },*!/
-           // where: {$and:{$or:[{[Sequelize.col(FriendsShip.requester)]:myId},{[Sequelize.col(FriendsShip.responser)]:myId}],status: 1} , $or: [{id:Sequelize.col(FriendsShip.requester)},{id:Sequelize.col(FriendsShip.responser)}]}
-          //  where: {requester: Sequelize.col('User.id'),responser: Sequelize.col('User.id')}
+           // where: {$and:{$or:[{[Sequelize.col(FriendsShip.requester_id)]:myId},{[Sequelize.col(FriendsShip.responser_id)]:myId}],status: 1} , $or: [{id:Sequelize.col(FriendsShip.requester_id)},{id:Sequelize.col(FriendsShip.responser_id)}]}
+          //  where: {requester_id: Sequelize.col('User.id'),responser_id: Sequelize.col('User.id')}
         }],
        // where: {$ne: {id:myId}}
-      //  where: {$and:{$or:[{requester:myId}, {responser:myId}]}}
+      //  where: {$and:{$or:[{requester_id:myId}, {responser_id:myId}]}}
     })*/
     // Старый добрый SQL выручает) Оставил запрос с Union так как он более читаемый ->
 //</editor-fold>
     const friends = await sequelize.query(
         `select id, first_name, second_name, email from user inner join 
-   (select requester as friend_id from  friends_ship where ( ${myId} = friends_ship.responser) and status = 1) as a on user.id = a.friend_id 
+   (select requester_id as friend_id from  friends_ship where ( ${myId} = friends_ship.responser_id) and status = 1) as a on user.id = a.friend_id 
    UNION
    select id, first_name, second_name, email from user inner join 
-   (select responser as friend_id from  friends_ship where ( ${myId} = friends_ship.requester) and status = 1) as a on user.id = a.friend_id`,
+   (select responser_id as friend_id from  friends_ship where ( ${myId} = friends_ship.requester_id) and status = 1) as a on user.id = a.friend_id`,
         {type: sequelize.QueryTypes.SELECT});
 
     return friends;
@@ -66,13 +66,13 @@ async function getUserFriends(myId) {
 
 async function getUserFriendsRequests(userId) {
 
-    return await FriendsShip.findAll({where: {responser: userId, status: 0}})
+    return await FriendsShip.findAll({where: {responser_id: userId, status: 0}})
 
 }
 
 async function requestFriendship(requesterId, responrerId) {
 
-    return await FriendsShip.create({requester: requesterId, responser: responrerId, status: 0})
+    return await FriendsShip.create({requester_id: requesterId, responser_id: responrerId, status: 0})
 
 }
 
