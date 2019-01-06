@@ -41,18 +41,18 @@ class HeaderWrapper extends React.Component {
         //    debugger // todo сделать обновление state в зависимости от роутинга
         if (this.state.validate) {
             return (
-                <ul>
-                    <li>
-                        <Link to='/profile'>Профиль</Link>
+                <ul className='nav nav-tabs justify-content-center'>
+                    <li className='nav-item'>
+                        <Link to='/profile' className='nav-link'>Профиль</Link>
                     </li>
-                    <li>
-                        <Link to='/feed'>Лента</Link>
+                    <li className='nav-item'>
+                        <Link to='/feed' className='nav-link'>Лента</Link>
                     </li>
-                    <li>
-                        <Link to='/users'>Пользователи</Link>
+                    <li className='nav-item'>
+                        <Link to='/users' className='nav-link'>Пользователи</Link>
                     </li>
-                    <li>
-                        <a href='/api/logout'>logout</a>
+                    <li className='nav-item'>
+                        <a href='/api/logout' className='nav-link'>logout</a>
                     </li>
                 </ul>
 
@@ -62,16 +62,16 @@ class HeaderWrapper extends React.Component {
 
         else
             return (
-                <ul>
-                    <li>
-                        <Link to='/login'>Войти</Link>
-                    </li>
+                <ul className='nav nav-tabs justify-content-center'>
+                    <li className='nav-item'>
+                        <Link to='/login' className='nav-link'>Войти</Link>
+                    </li >
 
-                    <li>
-                        <Link to='/registration'>Зарегистрироваться</Link>
+                    <li className='nav-item'>
+                        <Link to='/registration' className='nav-link'>Зарегистрироваться</Link>
                     </li>
-                    <li>
-                        <Link to='/users'>Пользователи</Link>
+                    <li className='nav-item' >
+                        <Link to='/users' className='nav-link'>Пользователи</Link>
                     </li>
                 </ul>
             )

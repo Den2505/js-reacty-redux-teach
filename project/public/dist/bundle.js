@@ -4749,14 +4749,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function PostList(_ref) {
     var posts = _ref.posts,
-        authenticatedUser = _ref.authenticatedUser,
+        currentUser = _ref.currentUser,
         friends = _ref.friends;
 
     var postsElements = posts.map(function (post) {
         return _react2.default.createElement(
             'li',
             { key: post.id },
-            _react2.default.createElement(_Post2.default, { post: post, authenticatedUser: authenticatedUser, friends: friends })
+            _react2.default.createElement(_Post2.default, { post: post, currentUser: currentUser, friends: friends })
         );
     });
 
@@ -4842,7 +4842,7 @@ var User = function (_React$Component) {
             if (this.props.enableAddButton) {
                 return _react2.default.createElement(
                     "button",
-                    { onClick: this.addUserToFriends, className: "btn-outline-",
+                    { onClick: this.addUserToFriends, className: "btn-outline",
                         style: { width: 200, marginLeft: 10 } },
                     "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 \u0434\u0440\u0443\u0436\u043A\u0438"
                 );
@@ -4851,9 +4851,9 @@ var User = function (_React$Component) {
     }, {
         key: "addUserToFriends",
         value: function addUserToFriends(event) {
-            fetch(_backendDependencies2.default.beMyFriend(this.state.user.id)).then(function () {
-                return event.target.disabled = true;
-            });
+            event.preventDefault();
+            event.target.disabled = true;
+            fetch(_backendDependencies2.default.beMyFriend(this.state.user.id));
         }
     }, {
         key: "render",
@@ -33146,9 +33146,6 @@ var Feed = function (_React$Component) {
             if (this.props.myId) {
                 this.props.fetchFriendsList(this.props.myId);
             }
-            /*this.getPosts().then((responseData) => {
-                this.setState({data: responseData})
-            });*/
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -33207,7 +33204,7 @@ var Feed = function (_React$Component) {
                 _react2.default.createElement(
                     'h2',
                     null,
-                    'Friends Posts'
+                    '\u041B\u0435\u043D\u0442\u0430'
                 ),
                 this.loading(),
                 _react2.default.createElement(
@@ -33305,8 +33302,8 @@ var Post = function (_React$Component) {
         value: function getAuthor() {
             var _this2 = this;
 
-            if (this.props.authenticatedUser) {
-                this.setState({ userData: this.props.authenticatedUser });
+            if (this.props.currentUser) {
+                this.setState({ userData: this.props.currentUser });
             }
             /* else
                  fetch(URL.getCurrentUser(this.state.user_id))
@@ -33360,7 +33357,7 @@ function mapStateToProps(store) {
     };
 }
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Post);
+exports.default = (0, _reactRedux.connect)()(Post);
 
 /***/ }),
 /* 118 */
@@ -33546,11 +33543,10 @@ var Profile = function (_React$Component) {
 
             if ((this.state.status === 'me' || this.state.status === 'friend') && this.state.data.user.id) {
                 if (this.state.status === 'me') {
-                    return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], authenticatedUser: this.state.data.user, enablePostForm: true,
+                    return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], currentUser: this.state.data.user, enablePostForm: true,
                         uid: this.props.uid || this.state.data.user.id });
                 }
-
-                return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], uid: this.state.data.user.id });
+                return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], uid: this.state.data.user.id, currentUser: this.state.data.user });
             }
         }
     }, {
@@ -33893,10 +33889,10 @@ var PostPlace = function (_React$Component) {
                         ),
                         _react2.default.createElement('input', { type: 'submit', value: '\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u043F\u043E\u0441\u0442' })
                     ),
-                    _react2.default.createElement(_PostList2.default, { posts: this.state.posts || [], authenticatedUser: this.props.authenticatedUser })
+                    _react2.default.createElement(_PostList2.default, { posts: this.state.posts || [], currentUser: this.props.currentUser })
                 );
             }
-            return _react2.default.createElement(_PostList2.default, { posts: this.props.posts || [] });
+            return _react2.default.createElement(_PostList2.default, { posts: this.props.posts || [], currentUser: this.props.currentUser });
         }
     }, {
         key: 'render',
@@ -34147,71 +34143,71 @@ var HeaderWrapper = function (_React$Component) {
             if (this.state.validate) {
                 return _react2.default.createElement(
                     "ul",
-                    null,
+                    { className: "nav nav-tabs justify-content-center" },
                     _react2.default.createElement(
                         "li",
-                        null,
+                        { className: "nav-item" },
                         _react2.default.createElement(
                             _reactRouterDom.Link,
-                            { to: "/profile" },
+                            { to: "/profile", className: "nav-link" },
                             "\u041F\u0440\u043E\u0444\u0438\u043B\u044C"
                         )
                     ),
                     _react2.default.createElement(
                         "li",
-                        null,
+                        { className: "nav-item" },
                         _react2.default.createElement(
                             _reactRouterDom.Link,
-                            { to: "/feed" },
+                            { to: "/feed", className: "nav-link" },
                             "\u041B\u0435\u043D\u0442\u0430"
                         )
                     ),
                     _react2.default.createElement(
                         "li",
-                        null,
+                        { className: "nav-item" },
                         _react2.default.createElement(
                             _reactRouterDom.Link,
-                            { to: "/users" },
+                            { to: "/users", className: "nav-link" },
                             "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438"
                         )
                     ),
                     _react2.default.createElement(
                         "li",
-                        null,
+                        { className: "nav-item" },
                         _react2.default.createElement(
                             "a",
-                            { href: "/api/logout" },
+                            { href: "/api/logout", className: "nav-link" },
                             "logout"
                         )
                     )
                 );
             } else return _react2.default.createElement(
                 "ul",
-                null,
+                { className: "nav nav-tabs justify-content-center" },
                 _react2.default.createElement(
                     "li",
-                    null,
+                    { className: "nav-item" },
                     _react2.default.createElement(
                         _reactRouterDom.Link,
-                        { to: "/login" },
+                        { to: "/login", className: "nav-link" },
                         "\u0412\u043E\u0439\u0442\u0438"
                     )
                 ),
                 _react2.default.createElement(
                     "li",
-                    null,
+                    { className: "nav-item" },
                     _react2.default.createElement(
                         _reactRouterDom.Link,
-                        { to: "/registration" },
+                        { to: "/registration", className: "nav-link" },
                         "\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F"
                     )
                 ),
                 _react2.default.createElement(
                     "li",
-                    null,
+                    { className: "nav-item" },
                     _react2.default.createElement(
                         _reactRouterDom.Link,
-                        { to: "/users" },
+                        { to: "/users", className: "nav-link" },
                         "\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438"
                     )
                 )
@@ -34422,18 +34418,38 @@ var Users = function (_React$Component) {
                 'form',
                 null,
                 _react2.default.createElement(
-                    'label',
-                    null,
-                    '\u0424\u0430\u043C\u0438\u043B\u0438\u044F:',
-                    _react2.default.createElement('input', { name: 'secondName', value: this.state.secondName, onChange: this.onChangeForm })
-                ),
-                _react2.default.createElement(
-                    'label',
-                    null,
-                    '\u0418\u043C\u044F:',
-                    _react2.default.createElement('input', { name: 'firstName', value: this.state.firstName, onChange: this.onChangeForm })
-                ),
-                _react2.default.createElement('input', { name: 'submit', type: 'submit', value: '\u041F\u043E\u0438\u0441\u043A', onClick: this.onSubmitForm })
+                    'div',
+                    { className: 'form-row justify-content-center' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'col-auto' },
+                        _react2.default.createElement(
+                            'label',
+                            { className: 'sr-only', htmlFor: 'secondName' },
+                            '\u0424\u0430\u043C\u0438\u043B\u0438\u044F:'
+                        ),
+                        _react2.default.createElement('input', { name: 'secondName', value: this.state.secondName, onChange: this.onChangeForm,
+                            id: 'secondName', className: 'form-control mb-2', placeholder: '\u0424\u0430\u043C\u0438\u043B\u0438\u044F',
+                            style: { width: '100%' } })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'col-auto' },
+                        _react2.default.createElement(
+                            'label',
+                            { className: 'sr-only', htmlFor: 'firstName' },
+                            '\u0418\u043C\u044F:'
+                        ),
+                        _react2.default.createElement('input', { name: 'firstName', value: this.state.firstName, onChange: this.onChangeForm,
+                            id: 'firstName', className: 'form-control mb-2', placeholder: '\u0418\u043C\u044F', style: { width: '100%' } })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'col-auto' },
+                        _react2.default.createElement('input', { name: 'submit', type: 'submit', value: '\u041F\u043E\u0438\u0441\u043A', onClick: this.onSubmitForm,
+                            className: 'btn btn-primary' })
+                    )
+                )
             );
         }
     }, {
@@ -34443,8 +34459,8 @@ var Users = function (_React$Component) {
                 'div',
                 null,
                 _react2.default.createElement(
-                    'header',
-                    null,
+                    'h2',
+                    { className: '' },
                     '\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0438'
                 ),
                 this.finder(),

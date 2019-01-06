@@ -33,9 +33,7 @@ class Feed extends React.Component {
 
     componentDidMount() {
         if(this.props.myId){this.props.fetchFriendsList(this.props.myId);}
-        /*this.getPosts().then((responseData) => {
-            this.setState({data: responseData})
-        });*/
+
     }
 
     componentWillReceiveProps(nextProps){
@@ -79,7 +77,7 @@ class Feed extends React.Component {
     render() {
         return (
             <div>
-                <h2>Friends Posts</h2>
+                <h2>Лента</h2>
                 {this.loading()}
                 <button onClick={this.shiftOffset}>Показать ещё</button>
             </div>

@@ -26,7 +26,8 @@ class Users extends React.Component {
             this.props.fetchFriendsList(this.props.myId)
         }
     }
-    componentWillReceiveProps(nextProps){
+
+    componentWillReceiveProps(nextProps) {
         if (!this.props.friends && !this.props.myId && nextProps.myId) {
             this.props.fetchFriendsList(nextProps.myId)
         }
@@ -45,8 +46,8 @@ class Users extends React.Component {
     }
 
     onUsersLoad() {
-        if(this.state.users)
-        return <UserList allUsers={true} users={this.state.users}/>
+        if (this.state.users)
+            return <UserList allUsers={true} users={this.state.users}/>
     }
 
     onChangeForm(event) {
@@ -57,7 +58,7 @@ class Users extends React.Component {
 
     onSubmitForm(event) {
         event.preventDefault();
-        fetch(URL.getAllUsers(this.state.firstName,this.state.secondName))
+        fetch(URL.getAllUsers(this.state.firstName, this.state.secondName))
             .then((res) => res.json())
             .then(users => this.setState({users: users}))
     }
@@ -65,15 +66,28 @@ class Users extends React.Component {
     finder() {
         return (
             <form>
-                <label>
-                    Фамилия:
-                    <input name='secondName' value={this.state.secondName} onChange={this.onChangeForm}/>
-                </label>
-                <label>
-                    Имя:
-                    <input name='firstName' value={this.state.firstName} onChange={this.onChangeForm}/>
-                </label>
-                <input name='submit' type='submit' value='Поиск' onClick={this.onSubmitForm}/>
+                <div className='form-row justify-content-center'>
+                    <div className='col-auto'>
+                        <label className='sr-only' htmlFor='secondName'>Фамилия:</label>
+
+                            <input name='secondName' value={this.state.secondName} onChange={this.onChangeForm}
+                                   id='secondName' className='form-control mb-2' placeholder='Фамилия'
+                                   style={{width: '100%'}}/>
+
+                    </div>
+                    <div className='col-auto'>
+                        <label className='sr-only' htmlFor='firstName'>Имя:</label>
+
+                            <input name='firstName' value={this.state.firstName} onChange={this.onChangeForm}
+                                   id='firstName' className='form-control mb-2' placeholder='Имя' style={{width: '100%'}}/>
+
+                    </div>
+                    <div className='col-auto'>
+                        <input name='submit' type='submit' value='Поиск' onClick={this.onSubmitForm}
+                               className='btn btn-primary'/>
+                    </div>
+                </div>
+
             </form>
         )
     }
@@ -81,7 +95,7 @@ class Users extends React.Component {
     render() {
         return (
             <div>
-                <header>Пользователи</header>
+                <h2 className=''>Пользователи</h2>
                 {this.finder()}
                 {this.onUsersLoad()}
             </div>

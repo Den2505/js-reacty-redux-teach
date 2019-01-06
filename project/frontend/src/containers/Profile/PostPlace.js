@@ -64,12 +64,12 @@ class PostPlace extends React.Component {
                         </label>
                         <input type="submit" value="Добавить пост"/>
                     </form>
-                    <PostList posts={this.state.posts || [] } authenticatedUser={this.props.authenticatedUser}/>
+                    <PostList posts={this.state.posts || [] } currentUser={this.props.currentUser}/>
                 </div>
             )
         }
         return (
-            <PostList posts={this.props.posts || []} />
+            <PostList posts={this.props.posts || []} currentUser={this.props.currentUser} />
         )
     }
 

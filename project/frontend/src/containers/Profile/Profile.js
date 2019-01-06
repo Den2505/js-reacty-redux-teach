@@ -78,11 +78,10 @@ class Profile extends React.Component {
 
         if ((this.state.status === 'me' || this.state.status === 'friend') && (this.state.data.user.id)) {
             if (this.state.status === 'me') {
-                return (<PostPlace posts={this.state.data.posts || []} authenticatedUser = {this.state.data.user} enablePostForm={true}
+                return (<PostPlace posts={this.state.data.posts || []} currentUser = {this.state.data.user} enablePostForm={true}
                                    uid={this.props.uid || this.state.data.user.id}/>)
             }
-
-            return (<PostPlace posts={this.state.data.posts || []} uid={this.state.data.user.id}/>)
+            return (<PostPlace posts={this.state.data.posts || []}  uid={this.state.data.user.id} currentUser = {this.state.data.user}/>)
         }
 
     }

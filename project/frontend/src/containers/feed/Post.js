@@ -24,8 +24,8 @@ class Post extends React.Component {
 
     getAuthor() {
 
-            if (this.props.authenticatedUser) {
-                this.setState({userData: this.props.authenticatedUser})
+            if (this.props.currentUser) {
+                this.setState({userData: this.props.currentUser})
             }
            /* else
                 fetch(URL.getCurrentUser(this.state.user_id))
@@ -64,8 +64,8 @@ class Post extends React.Component {
 
 function mapStateToProps(store) {
     return {
-        friends: store.friends.friends,
+         friends: store.friends.friends,
     }
 }
 
-export default connect(mapStateToProps)(Post);
+export default connect()(Post);

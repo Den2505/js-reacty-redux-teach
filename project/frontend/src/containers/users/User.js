@@ -32,15 +32,17 @@ class User extends React.Component {
     createAddButton() {
         if (this.props.enableAddButton) {
             return (
-                <button onClick={this.addUserToFriends} className='btn-outline-'
+                <button onClick={this.addUserToFriends} className='btn-outline'
                         style={{width: 200, marginLeft: 10}}>Добавить в дружки</button>
             )
         }
     }
 
     addUserToFriends(event) {
+        event.preventDefault();
+        event.target.disabled = true
         fetch(URL.beMyFriend(this.state.user.id))
-            .then(() => event.target.disabled = true);
+
 
     }
 
