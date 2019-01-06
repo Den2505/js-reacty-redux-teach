@@ -63,7 +63,7 @@ const userRouter = {
         else {
 
             if (ctx.params.id == ctx.state.user.id) {
-                ctx.redirect(`/me`);
+                ctx.redirect(`/api/profile`);
                 ctx.end;
             }
             else {
@@ -114,6 +114,7 @@ const userRouter = {
         if (ctx.isUnauthenticated()) {
             ctx.throw(401, 'Unauthenticated');
         }
+        ctx.response.body = ctx.state.user.id
     }
 
 

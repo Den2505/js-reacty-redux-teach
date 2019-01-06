@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect} from "react-router-dom";
-//const md5 = require('js-md5');
+import URL from '../../backendDependencies'
 import md5 from 'js-md5';
 
 class Registration extends React.Component {
@@ -32,7 +32,7 @@ class Registration extends React.Component {
             resolve(message);
         })
             .then((message) => {
-                fetch('./signup', {
+                fetch(URL.signUp, {
                     method: 'POST',
                     headers: {
                         "Content-type": "application/json; charset=UTF-8"

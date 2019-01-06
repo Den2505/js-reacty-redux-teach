@@ -1,20 +1,4 @@
-export const friendsReducer1 = function (store) {
 
-    const newStore = {
-        ...store,
-        friends: [{
-            id: 1,
-            first_name: "Den",
-            second_name: "Den",
-            email: 'test@',
-        }
-
-
-        ]
-    }
-    return newStore
-
-}
 
 
 export const friendsReducer = function (store, action) {
@@ -23,7 +7,16 @@ export const friendsReducer = function (store, action) {
             ...store,
             friends: action.payload,
 
+        }
+    }
+    return {...store}
+};
 
+export const authenticatedUserReducer = function (store, action) {
+    if (action.type === 'SET_AUTHENTICATED_USER_ID') {
+        return {
+            ...store,
+            id: action.payload
         }
     }
     return {...store}

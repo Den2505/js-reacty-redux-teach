@@ -1,4 +1,5 @@
 import React from 'react'
+import URL from '../../backendDependencies'
 
 export default class Request extends React.Component {
     constructor(props) {
@@ -16,13 +17,13 @@ export default class Request extends React.Component {
     }
 
     getRequester() {
-        fetch(`/users/${this.state.request.requester}`)
+        fetch(URL.getCurrentUser(this.state.request.requester_id))
             .then((res) => res.json())
-            .then((requester) => this.setState({requester_id: requester}))
+            .then((requester) => {this.setState({requester: requester}); debugger})
     }
 
     confirmFriendsShip() {
-        fetch(`/me/friends/requests/${this.state.request.id}/response`,
+        fetch(URL.friendsShipResponse(this.state.request.id),
             {
                 method: 'POST',
                 headers: {
@@ -34,7 +35,7 @@ export default class Request extends React.Component {
     }
 
     rejectFriendsShip() {
-        fetch(`/me/friends/requests/${this.state.request.id}/response`,
+        fetch(URL.friendsShipResponse(this.state.request.id),
             {
                 method: 'POST',
                 headers: {

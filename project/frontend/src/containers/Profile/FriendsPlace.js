@@ -3,6 +3,7 @@ import React from 'react'
 import UserList from '../users/UserList'
 import {fetchFriendsList} from "../../redux-components/actions";
 import connect from "react-redux/es/connect/connect";
+import URL from '../../backendDependencies'
 
 
 class FriendsPlace extends React.Component {
@@ -29,7 +30,7 @@ class FriendsPlace extends React.Component {
 
     getFriendsList(id) {
 
-        fetch(`/users/${id}/friends`)
+        fetch(URL.getCurrentUserFriends(id))
             .then((req) => req.json())
             .then((friends) => {
                 this.setState({friends: friends})

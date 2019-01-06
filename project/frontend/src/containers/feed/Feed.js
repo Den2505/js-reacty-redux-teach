@@ -1,6 +1,8 @@
 import React from 'react'
 import PostList from './PostList'
-
+import URL from '../../backendDependencies'
+import {fetchFriendsList} from "../../redux-components/actions";
+import {connect} from 'react-redux';
 
 class Feed extends React.Component {
     constructor(props) {
@@ -29,21 +31,33 @@ class Feed extends React.Component {
         this.shiftOffset = this.shiftOffset.bind(this);
     }
 
-    componentWillMount() {
-        this.getPosts().then((responseData) => {
+    componentDidMount() {
+        if(this.props.myId){this.props.fetchFriendsList(this.props.myId);}
+        /*this.getPosts().then((responseData) => {
             this.setState({data: responseData})
-        });
+        });*/
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(!this.props.myId && nextProps.myId){
+            this.props.fetchFriendsList(nextProps.myId)
+        }
+        if(nextProps.friends){
+            this.getPosts().then((responseData) => {
+                this.setState({data: responseData, friends:nextProps.friends})
+            });
+        }
     }
 
     getPosts() {
 
-        return fetch(`./feed?offset=${this.state.offset}&limit=${this.state.limit}`)
+        return fetch(URL.feed(this.state.offset, this.state.limit))
             .then((response) => response.json())
     }
 
     loading() {
         if (this.state.data[0]) {
-            return (<PostList posts={this.state.data}/>)
+            return (<PostList posts={this.state.data} friends={this.state.friends}/>)
         }
         else return (<h3>Loading</h3>)
     }
@@ -74,4 +88,18 @@ class Feed extends React.Component {
 
 }
 
-export default Feed
+function mapStateToProps(store) {
+    return {
+        friends: store.friends.friends,
+        myId: store.AuthenticatedUser.id
+    }
+}
+
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchFriendsList: (myId) => dispatch(fetchFriendsList(myId)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feed)

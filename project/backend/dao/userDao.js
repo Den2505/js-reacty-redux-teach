@@ -39,6 +39,7 @@ async function getAllUsers(firstName, secondName) {
 
 
     const users = await User.findAll({
+        attributes:['id','first_name','second_name','email'],
         where: {
             $and: {
                 first_name: {$like: firstName},

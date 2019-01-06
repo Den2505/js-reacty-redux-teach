@@ -1,9 +1,9 @@
 import React from 'react'
 import Post from './Post'
 
-function PostList({posts}) {
+function PostList({posts,authenticatedUser,friends}) {
     const postsElements = posts.map(post =>
-      <li key={post.id}>{<Post post = {post}/>}</li>
+      <li key={post.id}>{<Post post = {post} authenticatedUser={authenticatedUser} friends={friends}/>}</li>
     );
 
     return (

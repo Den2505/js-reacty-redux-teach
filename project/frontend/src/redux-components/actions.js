@@ -1,4 +1,4 @@
-import getUserFriends from '../backendDependencies'
+import URL from '../backendDependencies'
 
 export const setFriendsList = function (friendsList) {
     return {
@@ -7,9 +7,9 @@ export const setFriendsList = function (friendsList) {
     }
 }
 
-export const fetchFriendsList = function () {
+export const fetchFriendsList = function (myId) {
     return (dispatch) => (
-        fetch('./me/friends')
+        fetch(URL.getCurrentUserFriends(myId))
             .then((req) => req.json())
             .then((friends) => {
                 dispatch(setFriendsList(friends))
@@ -17,4 +17,11 @@ export const fetchFriendsList = function () {
     )
 
 }
+
+export const setAuthenticatedUserId = function (id) {
+    return {
+        type: "SET_AUTHENTICATED_USER_ID",
+        payload: id
+    }
+};
 

@@ -1,6 +1,9 @@
 import React from 'react'
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router";
+import URL from '../backendDependencies'
+import {setAuthenticatedUserId} from "../redux-components/actions";
+import {connect} from 'react-redux'
 
 class HeaderWrapper extends React.Component {
     constructor(props) {
@@ -17,7 +20,7 @@ class HeaderWrapper extends React.Component {
     }
 
     getValidationsStatus() {
-        fetch('/validate', {
+        fetch(URL.validate, {
             method: 'GET'
         })
             .then((res) => {
@@ -25,7 +28,10 @@ class HeaderWrapper extends React.Component {
                         this.setState({validate: false})
                     }
                     else {
-                        this.setState({validate: true})
+                        res.json().then((id) => {
+                            this.setState({validate: true});
+                            this.props.setAuthenticatedUserId(id)
+                        })
                     }
                 }
             )
@@ -36,17 +42,17 @@ class HeaderWrapper extends React.Component {
         if (this.state.validate) {
             return (
                 <ul>
-                    <li >
+                    <li>
                         <Link to='/profile'>Профиль</Link>
                     </li>
-                    <li >
+                    <li>
                         <Link to='/feed'>Лента</Link>
                     </li>
-                    <li >
+                    <li>
                         <Link to='/users'>Пользователи</Link>
                     </li>
-                    <li >
-                        <a href='/logout'>logout</a>
+                    <li>
+                        <a href='/api/logout'>logout</a>
                     </li>
                 </ul>
 
@@ -57,14 +63,14 @@ class HeaderWrapper extends React.Component {
         else
             return (
                 <ul>
-                    <li >
+                    <li>
                         <Link to='/login'>Войти</Link>
                     </li>
 
                     <li>
                         <Link to='/registration'>Зарегистрироваться</Link>
                     </li>
-                    <li >
+                    <li>
                         <Link to='/users'>Пользователи</Link>
                     </li>
                 </ul>
@@ -74,8 +80,8 @@ class HeaderWrapper extends React.Component {
     render() {
 
         return (
-            <div >
-                <nav >
+            <div>
+                <nav>
                     {this.validate()}
                 </nav>
             </div>
@@ -84,4 +90,16 @@ class HeaderWrapper extends React.Component {
     }
 }
 
-export default withRouter(HeaderWrapper);
+function mapStateToProps(store) {
+    return {
+        myId: store.AuthenticatedUser.id
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setAuthenticatedUserId: (id) => dispatch(setAuthenticatedUserId(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(HeaderWrapper));

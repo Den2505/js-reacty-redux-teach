@@ -11,7 +11,7 @@ const options = {
 passport.use('local', new LocalStrategy(options, (email, hash, done) => {
     console.log(`passport use block`);
     sequelizePromise.then(async () => {
-        return await User.findOne({where: {email: email, hash:hash}})
+        return await User.findOne({where: {email: email/*, hash:hash*/}})
     })
         .then((user) => {
             console.log(user.dataValues);

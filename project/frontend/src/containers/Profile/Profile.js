@@ -2,8 +2,8 @@ import React from 'react'
 import FriendsPlace from './FriendsPlace'
 import PostPlace from './PostPlace'
 import RequestList from '../FriendsShip/RequestList'
-import {fetchFriendsList} from "../../redux-components/actions";
-import connect from "react-redux/es/connect/connect";
+import URL from '../../backendDependencies'
+
 
 class Profile extends React.Component {
     constructor(props) {
@@ -33,12 +33,11 @@ class Profile extends React.Component {
     }
 
     getUserPage(id) {
-        console.log(`fetching ${this.props.status}`); // todo FIX STATUS
         const url = () => {
             if (this.props.status === 'me') {
-                return '/me'
+                return URL.me
             } else {
-                return `/users/${id}`
+                return URL.getCurrentUser(id)
             }
         };
         fetch(url())
@@ -52,8 +51,8 @@ class Profile extends React.Component {
                 }
                 //if(usr.posts)
                 if (usr.posts && Object.keys(usr.posts).length === 0) {
-                    this.setState({ data: {user: usr.user, posts: []}, status: status})
-                } else this.setState({ data: usr, status: status})
+                    this.setState({data: {user: usr.user, posts: []}, status: status})
+                } else this.setState({data: usr, status: status})
 
 
             })
@@ -67,7 +66,7 @@ class Profile extends React.Component {
                     <h4>{JSON.stringify(this.state.data.user) || ' '}</h4>
                     {this.friendsShipEventPlace()}
                     {this.requestsToFriendsPlace()}
-                    <FriendsPlace uid={ this.props.uid || this.state.data.user.id }/> {/*  */}
+                    <FriendsPlace uid={this.props.uid || this.state.data.user.id}/>
                 </div>
             );
         return (
@@ -78,21 +77,23 @@ class Profile extends React.Component {
     postsValidate() {
 
         if ((this.state.status === 'me' || this.state.status === 'friend') && (this.state.data.user.id)) {
-            if (this.state.status === 'me')
-                return (<PostPlace posts={this.state.data.posts || []} enablePostForm={true}
-                                   uid={this.props.uid || this.state.data.user.id }/>)
+            if (this.state.status === 'me') {
+                return (<PostPlace posts={this.state.data.posts || []} authenticatedUser = {this.state.data.user} enablePostForm={true}
+                                   uid={this.props.uid || this.state.data.user.id}/>)
+            }
+
             return (<PostPlace posts={this.state.data.posts || []} uid={this.state.data.user.id}/>)
         }
 
     }
 
     addUserToFriends(event) {
-        fetch(`/users/${this.state.userId}/beMyFriend/`)
+        fetch(URL.beMyFriend(this.state.userId))
         event.target.disabled = true;
     }
 
     deleteUserFromFriends() {
-        fetch(`/me/friends/${this.state.userId}`, {
+        fetch(URL.meFriend(this.state.userId), {
             method: `DELETE`
         })
     }
@@ -110,7 +111,7 @@ class Profile extends React.Component {
     }
 
     getFriendsRequests() {
-        fetch(`/me/friends/requests/`)
+        fetch(URL.meFriendsRequests)
             .then((res) => res.json())
             .then((requests) => {
                 this.setState({friendsRequests: requests})

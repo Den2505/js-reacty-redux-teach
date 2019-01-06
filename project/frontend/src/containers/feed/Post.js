@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import PostAuthor from './PostAuthor'
+import URL from '../../backendDependencies'
+import {connect} from 'react-redux'
 
 class Post extends React.Component {
     constructor(props) {
@@ -16,18 +18,29 @@ class Post extends React.Component {
 
     }
 
-  componentDidMount(){
-      this.getAuthor();
-  }
+    componentDidMount() {
+        this.getAuthor();
+    }
 
     getAuthor() {
-        fetch(`/users/${this.state.user_id}`)
-            .then((response) =>
-                response.json()
-            )
-            .then((data) => {
-                this.setState({userData: data.user})
-            })
+
+            if (this.props.authenticatedUser) {
+                this.setState({userData: this.props.authenticatedUser})
+            }
+           /* else
+                fetch(URL.getCurrentUser(this.state.user_id))
+                    .then((response) =>
+                        response.json()
+                    )
+                    .then((data) => {
+                        this.setState({userData: data.user})
+                    })*/
+
+        else if(this.props.friends) {
+            const user = this.props.friends.find((friend)=> friend.id === this.state.user_id);
+            this.setState({userData: user})
+        }
+
 
     }
 
@@ -49,4 +62,10 @@ class Post extends React.Component {
     }
 }
 
-export default Post
+function mapStateToProps(store) {
+    return {
+        friends: store.friends.friends,
+    }
+}
+
+export default connect(mapStateToProps)(Post);

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom'
 import md5 from 'js-md5';
+import URL from '../../backendDependencies';
 
 class LogInForm extends React.Component {
     constructor(props) {
@@ -33,7 +33,7 @@ class LogInForm extends React.Component {
             message.hash = hash;
             resolve(message);
         }).then((message) => {
-            fetch('./login', {
+            fetch(URL.signIn, {
                 method: 'POST',
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"

@@ -1,14 +1,14 @@
 import React from 'react'
-import UserList from './UserList'
+import UserList from './UserList2'
+import URL from '../../backendDependencies'
 import {fetchFriendsList} from "../../redux-components/actions";
 import {connect} from 'react-redux'
 
 class Users extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props.friends)
         this.state = {
-            users: [],
+            //users: [],
             firstName: '',
             secondName: '',
             offset: 50
@@ -22,8 +22,13 @@ class Users extends React.Component {
 
         this.getUsers()
 
-        if (!this.props.friends) {
-            this.props.fetchFriendsList()
+        if (!this.props.friends && this.props.myId) {
+            this.props.fetchFriendsList(this.props.myId)
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        if (!this.props.friends && !this.props.myId && nextProps.myId) {
+            this.props.fetchFriendsList(nextProps.myId)
         }
     }
 
@@ -34,12 +39,13 @@ class Users extends React.Component {
      }*/
 
     getUsers() {
-        fetch('./users')
+        fetch(URL.getAllUsers())
             .then((res) => res.json())
             .then(users => this.setState({users: users}))
     }
 
     onUsersLoad() {
+        if(this.state.users)
         return <UserList allUsers={true} users={this.state.users}/>
     }
 
@@ -51,12 +57,12 @@ class Users extends React.Component {
 
     onSubmitForm(event) {
         event.preventDefault();
-        fetch(`/users?first_name=${this.state.firstName}&second_name=${this.state.secondName}&offset=${this.state.offset}`)
+        fetch(URL.getAllUsers(this.state.firstName,this.state.secondName))
             .then((res) => res.json())
             .then(users => this.setState({users: users}))
     }
 
-    finder(limit, offset) {
+    finder() {
         return (
             <form>
                 <label>
@@ -85,13 +91,14 @@ class Users extends React.Component {
 
 function mapStateToProps(store) {
     return {
-        friends: store.friends.friends
+        friends: store.friends.friends,
+        myId: store.AuthenticatedUser.id
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchFriendsList: () => dispatch(fetchFriendsList())
+        fetchFriendsList: (myId) => dispatch(fetchFriendsList(myId))
     }
 }
 

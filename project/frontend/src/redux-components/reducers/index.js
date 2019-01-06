@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
-import {friendsReducer} from './friedsReduser'
+import {friendsReducer, authenticatedUserReducer} from './friedsReduser'
 
 export const allReducers = combineReducers({
-    friends: friendsReducer
+    friends: friendsReducer,
+    AuthenticatedUser:authenticatedUserReducer
 });
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from "react-router-dom";
+import URL from "../../backendDependencies";
 
 class User extends React.Component {
     constructor(props) {
@@ -11,10 +12,9 @@ class User extends React.Component {
                 id: user.id,
                 firstName: user.first_name,
                 secondName: user.second_name
-            },
-            cancelAddButton: this.props.cancelAddButton || false,
-
+            }
         }
+        this.addUserToFriends = this.addUserToFriends.bind(this);
     }
 
     user() {
@@ -24,18 +24,26 @@ class User extends React.Component {
                 <Link to={`/users/${this.state.user.id}`}>
                     {`${this.state.user.firstName} ${this.state.user.secondName }`}
                 </Link>
-
+                {this.createAddButton()}
             </div>
         )
     }
 
-createAddButton(){
-        if(!this.state.cancelAddButton){
+    createAddButton() {
+        if (this.props.enableAddButton) {
             return (
-                <button>Добавить в дружки</button>
+                <button onClick={this.addUserToFriends} className='btn-outline-'
+                        style={{width: 200, marginLeft: 10}}>Добавить в дружки</button>
             )
         }
-}
+    }
+
+    addUserToFriends(event) {
+        fetch(URL.beMyFriend(this.state.user.id))
+            .then(() => event.target.disabled = true);
+
+    }
+
     render() {
         return (
             <div>
