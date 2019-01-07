@@ -55,21 +55,24 @@ class PostPlace extends React.Component {
     onPostsLoaded() {
         if (this.props.enablePostForm) {
             return (
-                <div>
-                    <form onSubmit={this.onPostAddSubmit}>
-                        <label>
-                            Text...
+                <div className='form-group'>
+                    <form>
+                        <div className='col-auto col-sm-auto'>
+                            <label>Пост</label>
                             <textarea name='Пост' cols={100} value={this.state.postFormText}
-                                      onChange={this.onPostFormChange}/>
-                        </label>
-                        <input type="submit" value="Добавить пост"/>
+                                      onChange={this.onPostFormChange} className='form-control' rows='3' maxLength='2048'/>
+                        </div>
+                        <div className='form-group col-auto' style={{marginTop:10}}>
+                            <input onClick={this.onPostAddSubmit} type="submit" value="Опубликовать"
+                                   className='btn btn-primary'/>
+                        </div>
                     </form>
-                    <PostList posts={this.state.posts || [] } currentUser={this.props.currentUser}/>
+                    <PostList  posts={this.state.posts || []} currentUser={this.props.currentUser}/>
                 </div>
             )
         }
         return (
-            <PostList posts={this.props.posts || []} currentUser={this.props.currentUser} />
+            <PostList posts={this.props.posts || []} currentUser={this.props.currentUser}/>
         )
     }
 

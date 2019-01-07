@@ -17,7 +17,6 @@ router
     .delete(`/users/:id`, userRouter.deleteUserById)
     .get('/validate', userRouter.checkAuthenticated)
     ///FriendsRoutes
-    //.get(`/me/friends`, friendsShipRouter.getAuthenticatedUserFriends)
     .get(`/users/:uid/friends`, friendsShipRouter.getUserFriendsById)
     .get(`/profile/friends/requests`, friendsShipRouter.getAuthenticatedUserFriendsRequests)
     .post(`/profile/friends/requests/:rid/response`, friendsShipRouter.sendResponseByAuthenticatedUserRequest)
@@ -26,7 +25,7 @@ router
     ///PostRoutes
     .get(`/users/:uid/posts/:pid`,postRouter.getPostById)
     .get(`/users/:uid/posts/`, postRouter.getUserPosts)
-    .post(`/profile/posts/`, postRouter.addNewPostForAuthenticatedUser)
+    .post(`/profile/posts/`, postRouter.addNewPostForAuthenticatedUser) // only POST method for profile prefix
     .delete(`/users/:uid/posts/:pid`, postRouter.deletePostById)
     .get(`/feed`, postRouter.getAuthenticatedUserFeed);
 

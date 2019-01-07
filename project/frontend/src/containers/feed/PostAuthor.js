@@ -13,7 +13,7 @@ class PostAuthor extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='card-subtitle' >
                 {`${this.state.user.first_name} ${this.state.user.second_name}`}
             </div>
         )

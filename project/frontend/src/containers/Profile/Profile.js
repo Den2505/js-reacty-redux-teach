@@ -59,11 +59,13 @@ class Profile extends React.Component {
     }
 
     onUserLoad() {
-
+     const myPage = ()=>{
+     }
         if (this.props.uid || this.state.data.user.id)
             return (
                 <div>
-                    <h4>{JSON.stringify(this.state.data.user) || ' '}</h4>
+                    <h3 >{this.state.data.user.first_name + ' ' + this.state.data.user.second_name}</h3>
+                    <h4>{this.state.data.user.email}</h4>
                     {this.friendsShipEventPlace()}
                     {this.requestsToFriendsPlace()}
                     <FriendsPlace uid={this.props.uid || this.state.data.user.id}/>

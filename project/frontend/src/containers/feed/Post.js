@@ -54,9 +54,16 @@ class Post extends React.Component {
 
     render() {
         return (
-            <div>
-                {this.loadUser()}
-                <h4>{this.state.text}</h4>
+            <div className='card'>
+                <div className='card-body'>
+                    <div className='card-subtitle card-header'>
+                            {this.loadUser()}
+                    </div>
+                    <div className='card-text'>{this.state.text}</div>
+                </div>
+                <div className='card-subtitle card-footer'>
+                    {this.state.updated_at}
+                </div>
             </div>
         )
     }

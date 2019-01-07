@@ -3,11 +3,11 @@ import Post from './Post'
 
 function PostList({posts,currentUser,friends}) {
     const postsElements = posts.map(post =>
-      <li key={post.id}>{<Post post = {post} currentUser={currentUser} friends={friends}/>}</li>
+      <li key={post.id} style={{listStyleType:'none'}}>{<Post post = {post} currentUser={currentUser} friends={friends}/>}</li>
     );
 
     return (
-        <ul>
+        <ul className=''>
             {postsElements}
         </ul>
     )
