@@ -3,13 +3,13 @@ const chaiHttp = require('chai-http');
 const {expect} = chai;
 chai.use(chaiHttp);
 
-describe('LOGUP', async function () {
+describe('signIn', async function () {
 
     describe('LogUp users', async function () {
         let i = 0;
         beforeEach(async function () {
             const agent = chai.request.agent(this.app);
-            this.response = await agent.post('/logup/').send({
+            this.response = await agent.post('/signup/').send({
                 email: `test${++i}@example.com`,
                 hash: 'password',
                 firstName: 'test',
@@ -33,11 +33,11 @@ describe('LOGUP', async function () {
     });
 });
 
-describe('GET /me ', function () {
+describe('GET /profile ', function () {
     describe('when not authenticated', function () {
         before(async function () {
             this.response = await chai.request(this.app)
-                .get(`/me`)
+                .get(`/profile`)
                 .send();
         });
 
@@ -60,7 +60,7 @@ describe('GET /me ', function () {
                 hash: 'password',
             });
             this.response = await agent
-                .get(`/me`)
+                .get(`/profile`)
                 .send();
         });
 
@@ -80,7 +80,7 @@ describe('GET /me ', function () {
     });
 });
 
-describe(`me/posts/`, function () {
+/*describe(`me/posts/`, function () {
     describe(`add post`,function () {
         before(async function () {
             const agent = chai.request.agent(this.app);
@@ -93,4 +93,4 @@ describe(`me/posts/`, function () {
         });
     })
     
-})
+})*/
