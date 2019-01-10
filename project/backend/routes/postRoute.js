@@ -15,6 +15,7 @@ const postRouter = {
     },
     addNewPostForAuthenticatedUser: async (ctx) => {
         ctx.response.body = await postDao.createNewPost(ctx.request.body, ctx.state.user.id)
+            .then(()=> ctx.status = 201)
             .catch((e) => {
                 return ctx.throw(400, e);
             });

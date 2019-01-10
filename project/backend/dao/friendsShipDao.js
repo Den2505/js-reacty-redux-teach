@@ -81,7 +81,7 @@ async function confirmFriendshipRequest(cortegeId) {
     return await FriendsShip.findOne({where: {id: cortegeId}})
         .then(friendsShip => {
             friendsShip.status = 1;
-            friendsShip.save();
+            return friendsShip.save();
         })
 
 }

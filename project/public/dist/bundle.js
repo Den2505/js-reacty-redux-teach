@@ -33492,15 +33492,14 @@ var Profile = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             this.getUserPage(this.state.userId);
-            this.getFriendsRequests();
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
 
             if (this.props.uid !== nextProps.uid) {
+                this.setState({ friendsRequests: undefined });
                 this.getUserPage(nextProps.uid);
-                this.getFriendsRequests();
             }
         }
     }, {
@@ -33526,6 +33525,10 @@ var Profile = function (_React$Component) {
                 if (usr.posts && Object.keys(usr.posts).length === 0) {
                     _this2.setState({ data: { user: usr.user, posts: [] }, status: status });
                 } else _this2.setState({ data: usr, status: status });
+            }).then(function () {
+                if (_this2.state.status === 'me') {
+                    _this2.getFriendsRequests();
+                }
             });
         }
     }, {
@@ -33561,10 +33564,12 @@ var Profile = function (_React$Component) {
 
             if ((this.state.status === 'me' || this.state.status === 'friend') && this.state.data.user.id) {
                 if (this.state.status === 'me') {
-                    return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], currentUser: this.state.data.user, enablePostForm: true,
+                    return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], currentUser: this.state.data.user,
+                        enablePostForm: true,
                         uid: this.props.uid || this.state.data.user.id });
                 }
-                return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], uid: this.state.data.user.id, currentUser: this.state.data.user });
+                return _react2.default.createElement(_PostPlace2.default, { posts: this.state.data.posts || [], uid: this.state.data.user.id,
+                    currentUser: this.state.data.user });
             }
         }
     }, {
@@ -33602,11 +33607,13 @@ var Profile = function (_React$Component) {
         value: function getFriendsRequests() {
             var _this3 = this;
 
-            fetch(_backendDependencies2.default.meFriendsRequests).then(function (res) {
-                return res.json();
-            }).then(function (requests) {
-                _this3.setState({ friendsRequests: requests });
-            });
+            if (this.state.status === 'me') {
+                fetch(_backendDependencies2.default.meFriendsRequests).then(function (res) {
+                    return res.json();
+                }).then(function (requests) {
+                    _this3.setState({ friendsRequests: requests });
+                });
+            }
         }
     }, {
         key: 'requestsToFriendsPlace',

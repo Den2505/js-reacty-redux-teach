@@ -20,14 +20,15 @@ class Profile extends React.Component {
 
     componentDidMount() {
         this.getUserPage(this.state.userId);
-        this.getFriendsRequests();
+
     }
 
     componentWillReceiveProps(nextProps) {
 
         if (this.props.uid !== nextProps.uid) {
+            this.setState({friendsRequests: undefined});
             this.getUserPage(nextProps.uid);
-            this.getFriendsRequests();
+
         }
 
     }
@@ -55,16 +56,20 @@ class Profile extends React.Component {
                 } else this.setState({data: usr, status: status})
 
 
-            })
+            }).then(() => {
+            if (this.state.status === 'me') {
+                this.getFriendsRequests()
+            }
+        })
     }
 
     onUserLoad() {
-     const myPage = ()=>{
-     }
+        const myPage = () => {
+        }
         if (this.props.uid || this.state.data.user.id)
             return (
                 <div>
-                    <h3 >{this.state.data.user.first_name + ' ' + this.state.data.user.second_name}</h3>
+                    <h3>{this.state.data.user.first_name + ' ' + this.state.data.user.second_name}</h3>
                     <h4>{this.state.data.user.email}</h4>
                     {this.friendsShipEventPlace()}
                     {this.requestsToFriendsPlace()}
@@ -80,10 +85,12 @@ class Profile extends React.Component {
 
         if ((this.state.status === 'me' || this.state.status === 'friend') && (this.state.data.user.id)) {
             if (this.state.status === 'me') {
-                return (<PostPlace posts={this.state.data.posts || []} currentUser = {this.state.data.user} enablePostForm={true}
+                return (<PostPlace posts={this.state.data.posts || []} currentUser={this.state.data.user}
+                                   enablePostForm={true}
                                    uid={this.props.uid || this.state.data.user.id}/>)
             }
-            return (<PostPlace posts={this.state.data.posts || []}  uid={this.state.data.user.id} currentUser = {this.state.data.user}/>)
+            return (<PostPlace posts={this.state.data.posts || []} uid={this.state.data.user.id}
+                               currentUser={this.state.data.user}/>)
         }
 
     }
@@ -112,11 +119,14 @@ class Profile extends React.Component {
     }
 
     getFriendsRequests() {
-        fetch(URL.meFriendsRequests)
-            .then((res) => res.json())
-            .then((requests) => {
-                this.setState({friendsRequests: requests})
-            })
+        if (this.state.status === 'me') {
+            fetch(URL.meFriendsRequests)
+                .then((res) => res.json())
+                .then((requests) => {
+                    this.setState({friendsRequests: requests})
+                })
+        }
+
     }
 
     requestsToFriendsPlace() {
