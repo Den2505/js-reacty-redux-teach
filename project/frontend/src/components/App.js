@@ -14,10 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
-    }
+
 
 
 
@@ -37,19 +34,20 @@ class App extends React.Component {
                         <Route
                             exact
                             path='/profile'
-                            render = {(props)=>
+                            /*render = {(props)=>
                                 <Profile status = 'me' {...props}/>
-                            }
+                            }*/
+                            component={Profile}
                         />
                         <Route
                             exact
                             path='/users/:uid'
-                           /* component={Profile}*/
-                            render = {(props)=>
+                            component={Profile}
+                            /*render = {(props)=>
                                 <div>
                                     <Profile  uid = {props.match.params.uid} {...props}/>
                                 </div>
-                            }
+                            }*/
                         />
                         <Route
                             exact

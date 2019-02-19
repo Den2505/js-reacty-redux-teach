@@ -19,15 +19,16 @@ class Profile extends React.Component {
 
 
     componentDidMount() {
+
         this.getUserPage(this.state.userId);
 
     }
 
     componentWillReceiveProps(nextProps) {
 
-        if (this.props.uid !== nextProps.uid) {
+        if (this.props.match.params.uid !== nextProps.match.params.uid) {
             this.setState({friendsRequests: undefined});
-            this.getUserPage(nextProps.uid);
+            this.getUserPage(nextProps.match.params.uid);
 
         }
 
@@ -35,11 +36,15 @@ class Profile extends React.Component {
 
     getUserPage(id) {
         const url = () => {
-            if (this.props.status === 'me') {
+            /*if (this.props.status === 'me') {
                 return URL.me
             } else {
                 return URL.getCurrentUser(id)
+            }*/
+            if(id){
+                return URL.getCurrentUser(id)
             }
+            else { return URL.me}
         };
         fetch(url())
             .then((res) => res.json())
@@ -66,18 +71,18 @@ class Profile extends React.Component {
     onUserLoad() {
         const myPage = () => {
         }
-        if (this.props.uid || this.state.data.user.id)
+        if (this.props.match.params.uid || this.state.data.user.id)
             return (
                 <div>
                     <h3>{this.state.data.user.first_name + ' ' + this.state.data.user.second_name}</h3>
                     <h4>{this.state.data.user.email}</h4>
                     {this.friendsShipEventPlace()}
                     {this.requestsToFriendsPlace()}
-                    <FriendsPlace uid={this.props.uid || this.state.data.user.id}/>
+                    <FriendsPlace uid={this.props.match.params.uid || this.state.data.user.id}/>
                 </div>
             );
         return (
-            <h4>{JSON.stringify(this.props.uid) || ' '}</h4>
+            <h4>{JSON.stringify(this.props.match.params.uid) || ' '}</h4>
         )
     }
 
@@ -87,7 +92,7 @@ class Profile extends React.Component {
             if (this.state.status === 'me') {
                 return (<PostPlace posts={this.state.data.posts || []} currentUser={this.state.data.user}
                                    enablePostForm={true}
-                                   uid={this.props.uid || this.state.data.user.id}/>)
+                                   uid={this.props.match.params.uid      || this.state.data.user.id}/>)
             }
             return (<PostPlace posts={this.state.data.posts || []} uid={this.state.data.user.id}
                                currentUser={this.state.data.user}/>)
