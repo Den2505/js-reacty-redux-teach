@@ -9,9 +9,7 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-           // data: {user: undefined, posts: []},
             status: this.props.status || '',
-           // userId: this.props.match.params.uid,
         }
         this.addUserToFriends = this.addUserToFriends.bind(this);
         this.deleteUserFromFriends = this.deleteUserFromFriends.bind(this);
@@ -23,41 +21,16 @@ class Profile extends React.Component {
         this.getUserPage(this.props.match.params.uid);
 
     }
-    /*static getDerivedStateFromProps(props, state) {
 
-        if(state.userId !== props.match.params.uid){
-            return {
-                userId:props.match.params.uid,
-                friendsRequests: null
-
-            }
-        }
-        return null
-
-    }*/
-
-   /* componentWillReceiveProps(nextProps) {
-
-        if (this.props.match.params.uid !== nextProps.match.params.uid) {
-            this.setState({friendsRequests: undefined});
-            this.getUserPage(nextProps.match.params.uid);
-            debugger;
-
-        }
-
-    }*/
 
     getUserPage(id) {
         const url = () => {
-            /*if (this.props.status === 'me') {
-                return URL.me
-            } else {
-                return URL.getCurrentUser(id)
-            }*/
-            if(id){
+            if (id) {
                 return URL.getCurrentUser(id)
             }
-            else { return URL.me}
+            else {
+                return URL.me
+            }
         };
         fetch(url())
             .then((res) => res.json())
@@ -68,10 +41,11 @@ class Profile extends React.Component {
                 else {
                     status = 'other'
                 }
-                //if(usr.posts)
                 if (usr.posts && Object.keys(usr.posts).length === 0) {
                     this.setState({data: {user: usr.user, posts: []}, status: status})
-                } else {this.setState({data: usr, status: status})}
+                } else {
+                    this.setState({data: usr, status: status})
+                }
 
 
             }).then(() => {
@@ -83,7 +57,6 @@ class Profile extends React.Component {
 
     onUserLoad() {
         if (this.state.data) {
-            debugger
             return (
                 <div>
                     <h3>{this.state.data.user.first_name + ' ' + this.state.data.user.second_name}</h3>
@@ -103,7 +76,7 @@ class Profile extends React.Component {
             if (this.state.status === 'me') {
                 return (<PostPlace posts={this.state.data.posts || []} currentUser={this.state.data.user}
                                    enablePostForm={true}
-                                   uid={this.props.match.params.uid      || this.state.data.user.id}/>)
+                                   uid={this.props.match.params.uid || this.state.data.user.id}/>)
             }
             return (<PostPlace posts={this.state.data.posts || []} uid={this.state.data.user.id}
                                currentUser={this.state.data.user}/>)
@@ -146,7 +119,6 @@ class Profile extends React.Component {
     }
 
     requestsToFriendsPlace() {
-        //return(<div>{JSON.stringify(this.state.friendsRequests || [])}</div>)
         return (
             <RequestList requests={this.state.friendsRequests || []}/>
         )

@@ -27,7 +27,7 @@ class Registration extends React.Component {
     handleSubmit(event) {
         new Promise((resolve) => {
             const hash = md5(this.state.email + this.state.hash);
-            let message = Object.assign({},this.state);
+            let message = Object.assign({}, this.state);
             message.hash = hash;
             resolve(message);
         })
@@ -56,8 +56,9 @@ class Registration extends React.Component {
     }
 
     onRedirect() {
-        if (this.state.redirect)
+        if (this.state.redirect) {
             return <Redirect to='./login'/>
+        }
     }
 
     onError() {

@@ -43,6 +43,24 @@ export const fetchMyIdAndFriendsList = function () {
 
 }
 
+export const fetchMyId = function () {
+    return (dispatch) => (
+        fetch(URL.validate, {
+            method: 'GET'
+        })
+            .then((res) => {
+                if (res.status !== 401) {
+                    res.json().then((id) => {
+                        dispatch(setAuthenticatedUserId(id))
+                    })
+                }
+                else {
+                    dispatch(setAuthenticatedUserId(false))
+                }
+            })
+    )
+}
+
 export const setAuthenticatedUserId = function (id) {
     return {
         type: "SET_AUTHENTICATED_USER_ID",

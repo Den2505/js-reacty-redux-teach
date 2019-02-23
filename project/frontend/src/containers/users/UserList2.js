@@ -1,6 +1,5 @@
 import React from 'react'
 import User from './User'
-//import {setAuthenticatedUserId} from "../redux-components/actions";
 import {connect} from 'react-redux'
 
 class UserList extends React.Component {

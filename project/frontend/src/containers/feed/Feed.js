@@ -14,27 +14,25 @@ class Feed extends React.Component {
             offset: 0,
             limit: 10,
             offsetStep: 10,
-            tempId:0,
+            tempId: 0,
             getPosts: this.getPosts
         };
-       
+
         this.shiftOffset = this.shiftOffset.bind(this);
     }
 
     componentDidMount() {
         this.props.fetchFriendsList();
         this.getPosts()
-            .then((responseData)=>{this.setState({data:responseData});})
-
     }
 
     static getDerivedStateFromProps(props, state) {
-        if(props.friends  && !state.friends){
+        if (props.friends && !state.friends) {
             return {
-                friends:props.friends
+                friends: props.friends
             }
         }
-  return null
+        return null
 
     }
 
@@ -43,6 +41,9 @@ class Feed extends React.Component {
 
         return fetch(URL.feed(this.state.offset, this.state.limit))
             .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({data: this.state.data.concat(responseData)});
+            })
     }
 
     loading() {
@@ -58,9 +59,8 @@ class Feed extends React.Component {
             this.setState({offset: newOffset});
             resolve();
         }).then(() => {
-            this.getPosts().then((responseData) => {
-                this.setState({data: this.state.data.concat(responseData)})
-            })
+            this.getPosts()
+            // .then((responseData) => {this.setState({data: this.state.data.concat(responseData)})})
         })
 
 

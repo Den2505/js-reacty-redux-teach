@@ -1,6 +1,9 @@
 import React from 'react';
 import md5 from 'js-md5';
 import URL from '../../backendDependencies';
+import {connect} from 'react-redux'
+import {fetchMyId} from "../../redux-components/actions";
+
 
 class LogInForm extends React.Component {
     constructor(props) {
@@ -9,11 +12,8 @@ class LogInForm extends React.Component {
             email: '',
             hash: ''
         };
-        /* this.state.email = {value: ''};
-         this.state.password = {value: ''};*/
 
         this.handleChange = this.handleChange.bind(this);
-        //   this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -29,7 +29,7 @@ class LogInForm extends React.Component {
     handleSubmit(event) {
         new Promise(resolve => {
             const hash = md5(this.state.email + this.state.hash);
-            let message = Object.assign({},this.state);
+            let message = Object.assign({}, this.state);
             message.hash = hash;
             resolve(message);
         }).then((message) => {
@@ -50,10 +50,8 @@ class LogInForm extends React.Component {
 
     redirect() {
         if (this.state.redirect) {
-
-            window.location = './'
-
-            // this.props.history.push('/profile')
+            this.props.setAuthenticatedUserId();
+            this.props.history.push('./profile')
         }
 
     }
@@ -80,4 +78,10 @@ class LogInForm extends React.Component {
     }
 }
 
-export default LogInForm
+function mapDispatchToProps(dispatch) {
+    return {
+        setAuthenticatedUserId: () => dispatch(fetchMyId())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(LogInForm)

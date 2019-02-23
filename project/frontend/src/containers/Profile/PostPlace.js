@@ -29,7 +29,7 @@ class PostPlace extends React.Component {
     }
 
     onPostAddSubmit(event) {
-        fetch(URL.mePosts,  // TODO GET?
+        fetch(URL.mePosts,
             {
                 method: 'POST',
                 headers: {"Content-type": "application/json; charset=UTF-8"},

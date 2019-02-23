@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router";
 import URL from '../backendDependencies'
-import {setAuthenticatedUserId} from "../redux-components/actions";
+import {setAuthenticatedUserId, fetchMyId} from "../redux-components/actions";
 import {connect} from 'react-redux'
 
 class HeaderWrapper extends React.Component {
@@ -19,12 +19,22 @@ class HeaderWrapper extends React.Component {
         this.getAuthenticationStatus()
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if(props.myId && !state.validate){
+            return {
+                validate:true
+            }
+        }
+        return null;
+    }
+
     getAuthenticationStatus() {
         if (this.props.myId) {
             this.setState({validate: true})
         }
         else {
-            fetch(URL.validate, {
+            this.props.setAuthenticatedUserId()
+            /*fetch(URL.validate, {
                 method: 'GET'
             })
                 .then((res) => {
@@ -38,7 +48,7 @@ class HeaderWrapper extends React.Component {
                             })
                         }
                     }
-                )
+                )*/
         }
 
     }
@@ -103,7 +113,7 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setAuthenticatedUserId: (id) => dispatch(setAuthenticatedUserId(id))
+        setAuthenticatedUserId: () => dispatch(fetchMyId())
     }
 }
 
