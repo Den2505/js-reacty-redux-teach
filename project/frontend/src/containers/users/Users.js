@@ -27,12 +27,12 @@ class Users extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+   /* componentWillReceiveProps(nextProps) {
         if (!this.props.friends && !this.props.myId && nextProps.myId) {
             this.props.fetchFriendsList(nextProps.myId)
         }
     }
-
+*/
     /* componentWillReceiveProps(nextProps){
          if (this.props.friends == undefined && nextProps.friends != undefined) {
              this.props.fetchFriendsList;

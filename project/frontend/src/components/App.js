@@ -42,12 +42,16 @@ class App extends React.Component {
                         <Route
                             exact
                             path='/users/:uid'
-                            component={Profile}
-                            /*render = {(props)=>
+                           // component={Profile}
+                            // render need to use Fully uncontrolled component with a key
+                            // https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
+                            // impossible to do anything compromise
+                            // this can make a lot of unnecessary code
+                            render = {(props)=>
                                 <div>
-                                    <Profile  uid = {props.match.params.uid} {...props}/>
+                                    <Profile key={props.match.params.uid}  uid = {props.match.params.uid} {...props}/>
                                 </div>
-                            }*/
+                            }
                         />
                         <Route
                             exact

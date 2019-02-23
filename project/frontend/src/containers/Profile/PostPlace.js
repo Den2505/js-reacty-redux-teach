@@ -14,16 +14,6 @@ class PostPlace extends React.Component {
 
     }
 
-    componentDidMount() {
-        // this.getUserPosts(this.props.uid);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.posts !== this.props.posts) {
-            this.setState({posts: nextProps.posts})
-
-        }
-    }
 
     getUserPosts() {
         fetch(URL.getCurrentUserPosts(this.props.uid))

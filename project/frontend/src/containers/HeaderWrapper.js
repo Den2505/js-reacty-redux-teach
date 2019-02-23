@@ -16,29 +16,34 @@ class HeaderWrapper extends React.Component {
     }
 
     componentDidMount() {
-        this.getValidationsStatus()
+        this.getAuthenticationStatus()
     }
 
-    getValidationsStatus() {
-        fetch(URL.validate, {
-            method: 'GET'
-        })
-            .then((res) => {
-                    if (res.status === 401) {
-                        this.setState({validate: false})
+    getAuthenticationStatus() {
+        if (this.props.myId) {
+            this.setState({validate: true})
+        }
+        else {
+            fetch(URL.validate, {
+                method: 'GET'
+            })
+                .then((res) => {
+                        if (res.status === 401) {
+                            this.setState({validate: false})
+                        }
+                        else {
+                            res.json().then((id) => {
+                                this.setState({validate: true});
+                                this.props.setAuthenticatedUserId(id)
+                            })
+                        }
                     }
-                    else {
-                        res.json().then((id) => {
-                            this.setState({validate: true});
-                            this.props.setAuthenticatedUserId(id)
-                        })
-                    }
-                }
-            )
+                )
+        }
+
     }
 
-    validate() {
-        //    debugger // todo сделать обновление state в зависимости от роутинга
+    chooseLinks() {
         if (this.state.validate) {
             return (
                 <ul className='nav nav-tabs justify-content-center'>
@@ -65,12 +70,12 @@ class HeaderWrapper extends React.Component {
                 <ul className='nav nav-tabs justify-content-center'>
                     <li className='nav-item'>
                         <Link to='/login' className='nav-link'>Войти</Link>
-                    </li >
+                    </li>
 
                     <li className='nav-item'>
                         <Link to='/registration' className='nav-link'>Зарегистрироваться</Link>
                     </li>
-                    <li className='nav-item' >
+                    <li className='nav-item'>
                         <Link to='/users' className='nav-link'>Пользователи</Link>
                     </li>
                 </ul>
@@ -82,7 +87,7 @@ class HeaderWrapper extends React.Component {
         return (
             <div>
                 <nav>
-                    {this.validate()}
+                    {this.chooseLinks()}
                 </nav>
             </div>
 

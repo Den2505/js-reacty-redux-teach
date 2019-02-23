@@ -55,7 +55,7 @@ const userRouter = {
     getUserPageById: async (ctx) => {
         const user = await userDao.getUserById(ctx.params.id);
         if (ctx.isUnauthenticated()) {
-            const data = {id: user.id, first_name: user.first_name, second_name: user.second_name};
+            const data = {user:{id: user.id, first_name: user.first_name, second_name: user.second_name}};
             ctx.response.body = data;
             ctx.end;
             // ctx.throw(401, 'Unauthenticated');

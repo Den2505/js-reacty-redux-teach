@@ -22,11 +22,11 @@ class FriendsPlace extends React.Component {
         this.getFriendsList(this.state.uid);
     }
 
-    componentWillReceiveProps(nextProps) {
+    /*componentWillReceiveProps(nextProps) {
         if (this.props.uid !== nextProps.uid) {
             this.getFriendsList(nextProps.uid);
         }
-    }
+    }*/
 
     getFriendsList(id) {
 
@@ -56,7 +56,7 @@ class FriendsPlace extends React.Component {
 }
 
 
-function mapStateToProps(store) {
+/*function mapStateToProps(store) {
     return {
         friends: store.friends.friends
     }
@@ -66,6 +66,6 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchFriendsList: () => dispatch(fetchFriendsList())
     }
-}
+}*/
 
-export default connect(mapStateToProps, mapDispatchToProps)(FriendsPlace)
+export default connect(/*mapStateToProps, mapDispatchToProps*/)(FriendsPlace)

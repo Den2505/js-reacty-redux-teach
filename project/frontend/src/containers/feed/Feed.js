@@ -1,7 +1,7 @@
 import React from 'react'
 import PostList from './PostList'
 import URL from '../../backendDependencies'
-import {fetchFriendsList} from "../../redux-components/actions";
+import {fetchMyIdAndFriendsList} from "../../redux-components/actions";
 import {connect} from 'react-redux';
 
 class Feed extends React.Component {
@@ -9,43 +9,35 @@ class Feed extends React.Component {
         super(props);
 
         this.state = {
-            test:
-                [{
-                    id: 1,
-                    text: `qweqweqweqweqwe`
-                }
-                    ,
-                    {
-                        id: 2,
-                        text: `sdfsdfsdfsdfdsf`
-                    }],
             data: new Array(),
 
             offset: 0,
             limit: 10,
-            offsetStep: 10
+            offsetStep: 10,
+            tempId:0,
+            getPosts: this.getPosts
         };
-        /*
-                this.loading = this.loading.bind(this)
-                this.getPosts = this.getPosts.bind(this)*/
+       
         this.shiftOffset = this.shiftOffset.bind(this);
     }
 
     componentDidMount() {
-        if(this.props.myId){this.props.fetchFriendsList(this.props.myId);}
+        this.props.fetchFriendsList();
+        this.getPosts()
+            .then((responseData)=>{this.setState({data:responseData});})
 
     }
 
-    componentWillReceiveProps(nextProps){
-        if(!this.props.myId && nextProps.myId){
-            this.props.fetchFriendsList(nextProps.myId)
+    static getDerivedStateFromProps(props, state) {
+        if(props.friends  && !state.friends){
+            return {
+                friends:props.friends
+            }
         }
-        if(nextProps.friends){
-            this.getPosts().then((responseData) => {
-                this.setState({data: responseData, friends:nextProps.friends})
-            });
-        }
+  return null
+
     }
+
 
     getPosts() {
 
@@ -54,8 +46,8 @@ class Feed extends React.Component {
     }
 
     loading() {
-        if (this.state.data[0]) {
-            return (<PostList posts={this.state.data} friends={this.state.friends}/>)
+        if (this.state.data[0] && this.props.friends) {
+            return (<PostList posts={this.state.data} friends={this.props.friends}/>)
         }
         else return (<h3>Loading</h3>)
     }
@@ -96,7 +88,7 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchFriendsList: (myId) => dispatch(fetchFriendsList(myId)),
+        fetchFriendsList: () => dispatch(fetchMyIdAndFriendsList()),
     }
 }
 

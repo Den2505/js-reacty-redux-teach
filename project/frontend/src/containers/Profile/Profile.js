@@ -9,9 +9,9 @@ class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {user: '', posts: []},
+           // data: {user: undefined, posts: []},
             status: this.props.status || '',
-            userId: this.props.match.params.uid,
+           // userId: this.props.match.params.uid,
         }
         this.addUserToFriends = this.addUserToFriends.bind(this);
         this.deleteUserFromFriends = this.deleteUserFromFriends.bind(this);
@@ -20,19 +20,32 @@ class Profile extends React.Component {
 
     componentDidMount() {
 
-        this.getUserPage(this.state.userId);
+        this.getUserPage(this.props.match.params.uid);
 
     }
+    /*static getDerivedStateFromProps(props, state) {
 
-    componentWillReceiveProps(nextProps) {
+        if(state.userId !== props.match.params.uid){
+            return {
+                userId:props.match.params.uid,
+                friendsRequests: null
+
+            }
+        }
+        return null
+
+    }*/
+
+   /* componentWillReceiveProps(nextProps) {
 
         if (this.props.match.params.uid !== nextProps.match.params.uid) {
             this.setState({friendsRequests: undefined});
             this.getUserPage(nextProps.match.params.uid);
+            debugger;
 
         }
 
-    }
+    }*/
 
     getUserPage(id) {
         const url = () => {
@@ -58,7 +71,7 @@ class Profile extends React.Component {
                 //if(usr.posts)
                 if (usr.posts && Object.keys(usr.posts).length === 0) {
                     this.setState({data: {user: usr.user, posts: []}, status: status})
-                } else this.setState({data: usr, status: status})
+                } else {this.setState({data: usr, status: status})}
 
 
             }).then(() => {
@@ -69,21 +82,19 @@ class Profile extends React.Component {
     }
 
     onUserLoad() {
-        const myPage = () => {
-        }
-        if (this.props.match.params.uid || this.state.data.user.id)
+        if (this.state.data) {
+            debugger
             return (
                 <div>
                     <h3>{this.state.data.user.first_name + ' ' + this.state.data.user.second_name}</h3>
                     <h4>{this.state.data.user.email}</h4>
                     {this.friendsShipEventPlace()}
                     {this.requestsToFriendsPlace()}
-                    <FriendsPlace uid={this.props.match.params.uid || this.state.data.user.id}/>
+                    <FriendsPlace key={this.props.match.params.uid || this.state.data.user.id}
+                                  uid={this.props.match.params.uid || this.state.data.user.id}/>
                 </div>
             );
-        return (
-            <h4>{JSON.stringify(this.props.match.params.uid) || ' '}</h4>
-        )
+        }
     }
 
     postsValidate() {
