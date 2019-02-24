@@ -27,12 +27,9 @@ class LogInForm extends React.Component {
 
 
     handleSubmit(event) {
-        new Promise(resolve => {
             const hash = md5(this.state.email + this.state.hash);
             let message = Object.assign({}, this.state);
             message.hash = hash;
-            resolve(message);
-        }).then((message) => {
             fetch(URL.signIn, {
                 method: 'POST',
                 headers: {
@@ -40,9 +37,7 @@ class LogInForm extends React.Component {
                 },
                 body: JSON.stringify(message)
             })
-                .then(() => this.setState({redirect: true}))
-
-        })
+                .then(() => this.setState({redirect: true}));
 
         event.preventDefault();
 

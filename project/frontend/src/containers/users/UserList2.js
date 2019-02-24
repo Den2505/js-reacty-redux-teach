@@ -1,30 +1,35 @@
 import React from 'react'
 import User from './User'
 import {connect} from 'react-redux'
+import {fetchMyIdAndFriendsList} from '../../redux-components/actions'
 
 class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             allUsers: props.users,
-            users: []
+            users: [],
+            friends: props.friends,
         }
     }
 
     componentDidMount() {
-        this.mapList(this.props)
+            this.props.fetchFriendsList();
+        this.mapList(this.state);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if ((nextProps.friends && !this.props.friends && (nextProps.users || this.props.users)) || nextProps.users !== this.props.users) {
 
-            this.mapList(nextProps)
+
+    static getDerivedStateFromProps(props, state) {
+        if ((props.friends && !state.friends &&(props.users || state.allUsers)) || props.users !== state.allUsers) {
+            return {allUsers: props.users, friends: props.friends}
         }
+        return null;
     }
 
     mapList(props) {
         if (props.allUsers && props.friends) {
-            const users = props.users.map(user => {
+            const users = props.allUsers.map(user => {
                     const a = props.friends.find(friend => friend.id === user.id)
                     if (a) {
                         return <li className='list-group-item' key={a.id}>{<User user={a}/>}</li>
@@ -33,44 +38,46 @@ class UserList extends React.Component {
                         return <li className='list-group-item' key={user.id}>{<User user={user}/>}</li>
                     }
                     else {
-                        return <li className='list-group-item' key={user.id}>{<User enableAddButton={true} user={user}/>}</li>
+                        return <li className='list-group-item' key={user.id}>{<User enableAddButton={true}
+                                                                                    user={user}/>}</li>
                     }
 
-
                 }
             );
 
-            this.setState({users: users})
-        }
-        else {
-            const users = props.users.map(user => {
-
-                    return <li className='list-group-item' key={user.id}>{<User user={user}/>}</li>
-                }
-            );
-            this.setState({users: users})
+            return users;
         }
 
 
+
+    }
+
+    onUsersLoad(){
+        if(this.state.friends){
+            return this.mapList(this.state)
+        }
     }
 
 
     render() {
         return (
             <ul className="list-group">
-                {this.state.users}
+                {this.onUsersLoad()}
             </ul>
         );
     }
 
 }
-
+function mapDispatchToProps(dispatch) {
+    return{
+        fetchFriendsList: ()=> dispatch(fetchMyIdAndFriendsList())
+    }
+}
 function mapStateToProps(store) {
 
     return {
         friends: store.friends.friends,
-        myId: store.AuthenticatedUser.id
     }
 }
 
-export default connect(mapStateToProps)(UserList);
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);
