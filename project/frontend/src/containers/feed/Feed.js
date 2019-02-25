@@ -60,7 +60,6 @@ class Feed extends React.Component {
             resolve();
         }).then(() => {
             this.getPosts()
-            // .then((responseData) => {this.setState({data: this.state.data.concat(responseData)})})
         })
 
 

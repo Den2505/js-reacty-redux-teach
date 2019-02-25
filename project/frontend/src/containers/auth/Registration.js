@@ -25,13 +25,10 @@ class Registration extends React.Component {
     }
 
     handleSubmit(event) {
-        new Promise((resolve) => {
+
             const hash = md5(this.state.email + this.state.hash);
             let message = Object.assign({}, this.state);
             message.hash = hash;
-            resolve(message);
-        })
-            .then((message) => {
                 fetch(URL.signUp, {
                     method: 'POST',
                     headers: {
@@ -49,7 +46,6 @@ class Registration extends React.Component {
                             })
                         }
                     });
-            });
 
 
         event.preventDefault();
